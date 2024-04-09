@@ -19,3 +19,5 @@ What this mod doesn't do, but can be achieved with other mods:
 - Remove particles
 - Darken transitions
 - Disable screen shake
+
+Note that as I am not photosensitive myself, it is almost guaranteed that I missed some flashing lights. Therefore, do not hesitate to contact me so that I can update the mod to include them.
