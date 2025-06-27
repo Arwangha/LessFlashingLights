@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.6.2";
+        public override string GetVersion() => "0.6.3";
         private Scene _dontDestroyOnLoadScene;
         private GameObject? _emptyGo;
         private bool _ghostExploding;
@@ -26,7 +26,7 @@ namespace NoFlashingLights
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChange;
         }
 
-        private GameObject OnObjectSpawn(GameObject arg)
+        private GameObject OnObjectSpawn(GameObject arg)//general effects removal
         {
             if (arg.name.Contains("Flash") || arg.name.Contains("flash") || arg.name.Contains("White Wave"))
             {
@@ -42,7 +42,7 @@ namespace NoFlashingLights
         private void OnFsmEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
         {
             orig(self);
-            Log(self.name);
+            //Log(self.name);
             if (self.name.Contains("Tele Out Corpse R(Clone)"))
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
@@ -156,7 +156,6 @@ namespace NoFlashingLights
                 if (sRenderer != null)
                 {
                     sRenderer.enabled = false;
-                    Log("that worked");
                 }
             }
         }
@@ -202,7 +201,7 @@ namespace NoFlashingLights
 
         private bool OnEnableEnemy(GameObject enemy, bool isalreadydead)
         {
-            Log(enemy.name);
+            //Log(enemy.name);
             if (enemy.name.Contains("Absolute Radiance"))
             {
                 enemy.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
