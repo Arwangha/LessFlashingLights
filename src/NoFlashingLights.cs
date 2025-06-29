@@ -9,10 +9,11 @@ using Object = UnityEngine.Object;
 
 namespace NoFlashingLights
 {
-    public class NoFlashingLights : Mod
+    public class NoFlashingLights : Mod, ITogglableMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.6.3";
+        public override string GetVersion() => "0.6.6";
+        
         private Scene _dontDestroyOnLoadScene;
         private GameObject? _emptyGo;
         private bool _ghostExploding;
@@ -24,8 +25,25 @@ namespace NoFlashingLights
             ModHooks.OnEnableEnemyHook += OnEnableEnemy;
             ModHooks.ObjectPoolSpawnHook += OnObjectSpawn;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChange;
+            On.InvulnerablePulse.startInvulnerablePulse += OnInvulnerablePulse;
         }
 
+        private void OnInvulnerablePulse(On.InvulnerablePulse.orig_startInvulnerablePulse orig, InvulnerablePulse self)
+        {
+            self.pulseDuration = 999;
+            orig(self);
+        }
+
+        public void Unload()
+        {
+            On.HeroController.Awake -= OnHeroAwake;
+            On.PlayMakerFSM.OnEnable -= OnFsmEnable;
+            ModHooks.OnEnableEnemyHook -= OnEnableEnemy;
+            ModHooks.ObjectPoolSpawnHook -= OnObjectSpawn;
+            UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= OnSceneChange;
+            On.InvulnerablePulse.startInvulnerablePulse -= OnInvulnerablePulse;
+        }
+        
         private GameObject OnObjectSpawn(GameObject arg)//general effects removal
         {
             if (arg.name.Contains("Flash") || arg.name.Contains("flash") || arg.name.Contains("White Wave"))
@@ -47,6 +65,15 @@ namespace NoFlashingLights
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 RemoveMageLordFlashes();
+            }
+            
+            else if (self.name.Contains("Corpse Dream Mage Lord 1(Clone)"))
+            {
+                GameObject secondCorpse = GameObject.Find("Corpse Dream Mage Lord 1(Clone)");
+                secondCorpse.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+                secondCorpse.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
+                secondCorpse.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
+                Log(secondCorpse.name);
             }
 
             else if (self.name.Contains("End Flash 2"))
@@ -225,6 +252,8 @@ namespace NoFlashingLights
             else if (enemy.name == "Mage Lord")
             {
                 enemy.Child("Appear Flash").GetComponent<MeshRenderer>().enabled = false;
+                enemy.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+                enemy.Child("Fire Effect").GetComponent<MeshRenderer>().enabled = true;
             }
 
             else if (enemy.name.Contains("Mega Jellyfish"))
