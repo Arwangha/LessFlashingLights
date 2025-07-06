@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.7.5";
+        public override string GetVersion() => "0.7.7";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -317,6 +317,8 @@ namespace NoFlashingLights
             else if (enemy.name == "Mage Lord Phase2")
             {
                 enemy.Child("Appear Flash").GetComponent<MeshRenderer>().enabled = false;
+                enemy.Child("Quake Pillar").GetComponent<MeshRenderer>().enabled = false;
+                enemy.Child("Quake Blast").GetComponent<MeshRenderer>().enabled = false;
             }
 
             return isalreadydead;
@@ -473,16 +475,17 @@ namespace NoFlashingLights
                 if (knightGetQuake)
                 {
                     knightGetQuake.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+                    knightGetQuake.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
                     knightGetQuake.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
                 }
                 
-                GameObject quakePickup = knightGetQuake.Child("Quake Pickup");
+                GameObject quakePickup = quakeRealParent.Child("Quake Pickup");
 
                 if (quakePickup)
                 {
                     quakePickup.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
                     
-                    GameObject quakeItem = knightGetQuake.Child("Quake Item");
+                    GameObject quakeItem = quakePickup.Child("Quake Item");
 
                     if (quakeItem)
                     {
@@ -499,9 +502,10 @@ namespace NoFlashingLights
             GameObject.Find("cd_room_beam_glow").GetComponent<SpriteRenderer>().enabled = false;
             GameObject.Find("haze2 (1)").GetComponent<SpriteRenderer>().enabled = false;
             
-            GameObject endCutscene = GameObject.Find("End Cutscene");
+            GameObject flasher = GameObject.Find("End Cutscene").Child("Flasher");
             
-            endCutscene.Child("Flasher").GetComponent<SpriteRenderer>().enabled = false;
+            flasher.GetComponent<SpriteRenderer>().enabled = false;
+            flasher.GetComponent<PlayMakerFSM>().enabled = false;
         }
 
         private IEnumerator RemoveBirthPlaceTriggerFlashes()
@@ -512,8 +516,12 @@ namespace NoFlashingLights
 
             if (dreamEnterAbyss)
             {
-                dreamEnterAbyss.Child("Impact").GetComponent<MeshRenderer>().enabled = false;
-                dreamEnterAbyss.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+                GameObject whiteFlash = dreamEnterAbyss.Child("White Flash");
+                GameObject impact = dreamEnterAbyss.Child("Impact");
+                impact.GetComponent<MeshRenderer>().enabled = false;
+                impact.GetComponent<PlayMakerFSM>().enabled = false;
+                whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+                whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
             }
         }
 
