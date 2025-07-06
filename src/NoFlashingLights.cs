@@ -1,18 +1,23 @@
+using System.Collections;
 using Modding;
 using Modding.Utils;
 using Satchel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using Vasi;
+//using Vasi;
 using Object = UnityEngine.Object;
 
 namespace NoFlashingLights
 {
-    public class NoFlashingLights : Mod, ITogglableMod
+    public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.6.6";
+        public override string GetVersion() => "0.7.2";
+        
+        public static GlobalSettings Gs { get; private set; } = new();
+        
+        public bool ToggleButtonInsideMenu => true;
         
         private Scene _dontDestroyOnLoadScene;
         private GameObject? _emptyGo;
@@ -26,6 +31,13 @@ namespace NoFlashingLights
             ModHooks.ObjectPoolSpawnHook += OnObjectSpawn;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChange;
             On.InvulnerablePulse.startInvulnerablePulse += OnInvulnerablePulse;
+            On.WaveEffectControl.OnEnable += OnWaveEffectStart;
+        }
+
+        private void OnWaveEffectStart(On.WaveEffectControl.orig_OnEnable orig, WaveEffectControl self)
+        {
+            self.spriteRenderer.enabled = false;
+            orig(self);
         }
 
         private void OnInvulnerablePulse(On.InvulnerablePulse.orig_startInvulnerablePulse orig, InvulnerablePulse self)
@@ -42,6 +54,7 @@ namespace NoFlashingLights
             ModHooks.ObjectPoolSpawnHook -= OnObjectSpawn;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= OnSceneChange;
             On.InvulnerablePulse.startInvulnerablePulse -= OnInvulnerablePulse;
+            On.WaveEffectControl.OnEnable -= OnWaveEffectStart;
         }
         
         private GameObject OnObjectSpawn(GameObject arg)//general effects removal
@@ -190,7 +203,28 @@ namespace NoFlashingLights
         private void OnSceneChange(Scene oldScene, Scene newScene)
         {
             if (_ghostExploding) _ghostExploding = false;
-            if (newScene.name.Contains("GG_End_Sequence"))
+            
+            if (newScene.name == "Crossroads_ShamanTemple")
+            {
+                GameManager.instance.StartCoroutine(RemoveAncestralMoundFlashes());
+            }
+            
+            else if (newScene.name == "Room_Fungus_Shaman")
+            {
+                GameManager.instance.StartCoroutine(RemoveOvergrownMoundFlashes());
+            }
+            
+            else if (newScene.name == "Ruins1_24")
+            {
+                GameManager.instance.StartCoroutine(RemoveRealQuakeFlashes());
+            }
+            
+            else if (newScene.name == "Ruins1_24_boss")
+            {
+                GameManager.instance.StartCoroutine(RemoveFakeQuakeFlashes());
+            }
+            
+            else if (newScene.name.Contains("GG_End_Sequence"))
             {
                 SpriteRenderer[] orbFlashes =
                     GameObject.Find("Big Orb Flash").GetComponentsInChildren<SpriteRenderer>();
@@ -355,6 +389,106 @@ namespace NoFlashingLights
             {
                 appearFlash.GetComponent<MeshRenderer>().enabled = false;
             }
+        }
+
+        private IEnumerator RemoveAncestralMoundFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject props = GameObject.Find("_Props");
+            GameObject knightGetFireball = props.Child("Knight Get Fireball");
+            
+            if (knightGetFireball) 
+            {
+                knightGetFireball.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
+                knightGetFireball.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+            }
+                
+            GameObject shamanMeeting = props.Child("Shaman Meeting");
+            
+            if(shamanMeeting)
+            {
+                GameObject summonFx = shamanMeeting.Child("VS Summon Fx");
+                
+                if (summonFx)
+                {
+                    summonFx.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+                    summonFx.Child("Get Glow").GetComponent<MeshRenderer>().enabled = false;
+                }
+            }
+        }
+
+        private IEnumerator RemoveOvergrownMoundFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject knightGetScream = GameObject.Find("Scream Control").Child("Knight Get Scream");
+            
+            if (knightGetScream)
+            {
+                knightGetScream.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+                knightGetScream.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+
+        private IEnumerator RemoveFakeQuakeFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject quakeFakeParent = GameObject.Find("Quake Fake Parent");
+
+            if (quakeFakeParent)
+            {
+                GameObject knightGetQuakeFake = quakeFakeParent.Child("Knight Get Quake Fake");
+
+                if (knightGetQuakeFake)
+                {
+                    knightGetQuakeFake.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
+                    knightGetQuakeFake.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+                    knightGetQuakeFake.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
+                }
+            }
+        }
+
+        private IEnumerator RemoveRealQuakeFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject quakeRealParent = GameObject.Find("Quake Real Parent");
+
+            if (quakeRealParent)
+            {
+                GameObject knightGetQuake = quakeRealParent.Child("Knight Get Quake");
+
+                if (knightGetQuake)
+                {
+                    knightGetQuake.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+                    knightGetQuake.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
+                }
+                
+                GameObject quakePickup = knightGetQuake.Child("Quake Pickup");
+
+                if (quakePickup)
+                {
+                    quakePickup.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+                    
+                    GameObject quakeItem = knightGetQuake.Child("Quake Item");
+
+                    if (quakeItem)
+                    {
+                        quakeItem.Child("White Wave Default").GetComponent<SpriteRenderer>().enabled = false;
+                    }
+                }
+            }
+        }
+
+        public void OnLoadGlobal(GlobalSettings s) => Gs = s;
+
+        public GlobalSettings OnSaveGlobal() => Gs;
+
+        public MenuScreen GetMenuScreen(MenuScreen modListMenu, ModToggleDelegates? toggleDelegates)
+        {
+            return ModMenu.CreateModMenu(modListMenu, toggleDelegates);
         }
     }
 }
