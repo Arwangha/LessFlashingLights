@@ -5,7 +5,6 @@ using Satchel;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-//using Vasi;
 using Object = UnityEngine.Object;
 
 namespace NoFlashingLights
