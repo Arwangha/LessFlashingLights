@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.7.2";
+        public override string GetVersion() => "0.7.5";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -58,12 +58,12 @@ namespace NoFlashingLights
         
         private GameObject OnObjectSpawn(GameObject arg)//general effects removal
         {
-            if (arg.name.Contains("Flash") || arg.name.Contains("flash") || arg.name.Contains("White Wave"))
+            if (arg.name.Contains("Flash") || arg.name.Contains("flash") || arg.name.Contains("White Wave") || arg.name.Contains("Dream Impact"))
             {
                 arg.TryGetComponent(out SpriteRenderer sRenderer);
                 arg.TryGetComponent(out MeshRenderer mRenderer);
-                if (mRenderer != null) mRenderer.enabled = false;
-                if (sRenderer != null) sRenderer.enabled = false;
+                if (mRenderer) mRenderer.enabled = false;
+                if (sRenderer) sRenderer.enabled = false;
             }
 
             return arg;
@@ -192,7 +192,7 @@ namespace NoFlashingLights
             else if (self.name == "White Flash")
             {
                 self.gameObject.TryGetComponent(out SpriteRenderer sRenderer);
-                if (sRenderer != null)
+                if (sRenderer)
                 {
                     sRenderer.enabled = false;
                 }
@@ -221,6 +221,16 @@ namespace NoFlashingLights
             else if (newScene.name == "Ruins1_24_boss")
             {
                 GameManager.instance.StartCoroutine(RemoveFakeQuakeFlashes());
+            }
+            
+            else if (newScene.name == "Dream_Abyss")
+            {
+                GameManager.instance.StartCoroutine(RemoveBirthPlaceCutsceneFlashes());
+            }
+            
+            else if (newScene.name == "Abyss_15")
+            {
+                GameManager.instance.StartCoroutine(RemoveBirthPlaceTriggerFlashes());
             }
             
             else if (newScene.name.Contains("GG_End_Sequence"))
@@ -315,15 +325,16 @@ namespace NoFlashingLights
         private void OnHeroAwake(On.HeroController.orig_Awake orig, HeroController self)
         {
             orig(self);
-            RemoveHeroFlashes();
             _emptyGo = new GameObject();
             Object.DontDestroyOnLoad(_emptyGo);
             _dontDestroyOnLoadScene = _emptyGo.scene;
+            RemoveHeroFlashes();
         }
 
         private void RemoveHeroFlashes()
         {
             GameObject knight = GameObject.Find("Knight");
+            knight.Child("white_light_donut").GetComponent<SpriteRenderer>().enabled = false; 
 
             GameObject spells = knight.Child("Spells");
             spells.Child("Q Flash Slam").GetComponent<SpriteRenderer>().enabled = false;
@@ -478,6 +489,31 @@ namespace NoFlashingLights
                         quakeItem.Child("White Wave Default").GetComponent<SpriteRenderer>().enabled = false;
                     }
                 }
+            }
+        }
+
+        private IEnumerator RemoveBirthPlaceCutsceneFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject.Find("cd_room_beam_glow").GetComponent<SpriteRenderer>().enabled = false;
+            GameObject.Find("haze2 (1)").GetComponent<SpriteRenderer>().enabled = false;
+            
+            GameObject endCutscene = GameObject.Find("End Cutscene");
+            
+            endCutscene.Child("Flasher").GetComponent<SpriteRenderer>().enabled = false;
+        }
+
+        private IEnumerator RemoveBirthPlaceTriggerFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject dreamEnterAbyss = GameObject.Find("Dream Enter Abyss");
+
+            if (dreamEnterAbyss)
+            {
+                dreamEnterAbyss.Child("Impact").GetComponent<MeshRenderer>().enabled = false;
+                dreamEnterAbyss.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
             }
         }
 
