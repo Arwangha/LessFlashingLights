@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.7.7";
+        public override string GetVersion() => "0.7.11";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -41,7 +41,7 @@ namespace NoFlashingLights
 
         private void OnInvulnerablePulse(On.InvulnerablePulse.orig_startInvulnerablePulse orig, InvulnerablePulse self)
         {
-            self.pulseDuration = 999;
+            self.pulseDuration = 999;//effectively removes the pulse
             orig(self);
         }
 
@@ -66,13 +66,18 @@ namespace NoFlashingLights
                 if (sRenderer) sRenderer.enabled = false;
             }
 
+            if (arg.name.Contains("Gas Explosion Recycle"))
+            {
+                arg.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
+            }
+
             return arg;
         }
 
         private void OnFsmEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
         {
             orig(self);
-            //Log(self.name);
+            Log(self.name);
             if (self.name.Contains("Tele Out Corpse R(Clone)"))
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
@@ -296,7 +301,22 @@ namespace NoFlashingLights
             {
                 enemy.Child("Appear Flash").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
-                enemy.Child("Fire Effect").GetComponent<MeshRenderer>().enabled = true;
+                enemy.Child("Fire Effect").GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            else if (enemy.name == "Dream Mage Lord")
+            {
+                GameObject appearFlash = enemy.Child("Appear Flash");
+                GameObject whiteFlash = enemy.Child("White Flash");
+                GameObject fireEffect = enemy.Child("Fire Effect");
+                
+                appearFlash.GetComponent<MeshRenderer>().enabled = false;//for some reason there's additional fsms compared to SM
+                whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+                fireEffect.GetComponent<MeshRenderer>().enabled = false;
+                
+                appearFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                fireEffect.GetComponent<PlayMakerFSM>().enabled = false;
             }
 
             else if (enemy.name.Contains("Mega Jellyfish"))
@@ -319,6 +339,21 @@ namespace NoFlashingLights
                 enemy.Child("Appear Flash").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("Quake Pillar").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("Quake Blast").GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            else if (enemy.name == "Dream Mage Lord Phase2")
+            {
+                GameObject appearFlash = enemy.Child("Appear Flash");
+                GameObject quakePillar = enemy.Child("Quake Pillar");
+                GameObject quakeBlast = enemy.Child("Quake Blast");
+                
+                appearFlash.GetComponent<MeshRenderer>().enabled = false;
+                quakePillar.GetComponent<MeshRenderer>().enabled = false;
+                quakeBlast.GetComponent<MeshRenderer>().enabled = false;
+                
+                appearFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                quakePillar.GetComponent<PlayMakerFSM>().enabled = false;
+                quakeBlast.GetComponent<PlayMakerFSM>().enabled = false;
             }
 
             return isalreadydead;
