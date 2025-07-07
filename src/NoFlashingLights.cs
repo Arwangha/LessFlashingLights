@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.7.11";
+        public override string GetVersion() => "0.7.12";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -31,6 +31,13 @@ namespace NoFlashingLights
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChange;
             On.InvulnerablePulse.startInvulnerablePulse += OnInvulnerablePulse;
             On.WaveEffectControl.OnEnable += OnWaveEffectStart;
+            On.BossStatueDreamToggle.Fade += OnDreamToggleFade;
+        }
+
+        private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
+        {
+            self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, -200f);//puts our problems far away
+            yield return orig(self, usingDreamVersion);
         }
 
         private void OnWaveEffectStart(On.WaveEffectControl.orig_OnEnable orig, WaveEffectControl self)
@@ -54,8 +61,9 @@ namespace NoFlashingLights
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= OnSceneChange;
             On.InvulnerablePulse.startInvulnerablePulse -= OnInvulnerablePulse;
             On.WaveEffectControl.OnEnable -= OnWaveEffectStart;
+            On.BossStatueDreamToggle.Fade -= OnDreamToggleFade;
         }
-        
+
         private GameObject OnObjectSpawn(GameObject arg)//general effects removal
         {
             if (arg.name.Contains("Flash") || arg.name.Contains("flash") || arg.name.Contains("White Wave") || arg.name.Contains("Dream Impact"))
@@ -77,7 +85,7 @@ namespace NoFlashingLights
         private void OnFsmEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
         {
             orig(self);
-            Log(self.name);
+            //Log(self.name);
             if (self.name.Contains("Tele Out Corpse R(Clone)"))
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
