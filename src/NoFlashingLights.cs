@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.7.12";
+        public override string GetVersion() => "0.8.0";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -36,7 +36,7 @@ namespace NoFlashingLights
 
         private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
         {
-            self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, -200f);//puts our problems far away
+            self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
             yield return orig(self, usingDreamVersion);
         }
 
