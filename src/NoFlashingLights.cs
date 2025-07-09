@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.8.0";
+        public override string GetVersion() => "0.8.4";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -33,25 +33,7 @@ namespace NoFlashingLights
             On.WaveEffectControl.OnEnable += OnWaveEffectStart;
             On.BossStatueDreamToggle.Fade += OnDreamToggleFade;
         }
-
-        private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
-        {
-            self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
-            yield return orig(self, usingDreamVersion);
-        }
-
-        private void OnWaveEffectStart(On.WaveEffectControl.orig_OnEnable orig, WaveEffectControl self)
-        {
-            self.spriteRenderer.enabled = false;
-            orig(self);
-        }
-
-        private void OnInvulnerablePulse(On.InvulnerablePulse.orig_startInvulnerablePulse orig, InvulnerablePulse self)
-        {
-            self.pulseDuration = 999;//effectively removes the pulse
-            orig(self);
-        }
-
+        
         public void Unload()
         {
             On.HeroController.Awake -= OnHeroAwake;
@@ -64,10 +46,29 @@ namespace NoFlashingLights
             On.BossStatueDreamToggle.Fade -= OnDreamToggleFade;
         }
 
-        private GameObject OnObjectSpawn(GameObject arg)//general effects removal
+        private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
+        {
+            if (Gs.ToneDownGodhomeDreamStatues) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
+            yield return orig(self, usingDreamVersion);
+        }
+
+        private void OnWaveEffectStart(On.WaveEffectControl.orig_OnEnable orig, WaveEffectControl self)
+        {
+            if (Gs.RemoveGenericFlashingEffects) self.spriteRenderer.enabled = false;
+            orig(self);
+        }
+
+        private void OnInvulnerablePulse(On.InvulnerablePulse.orig_startInvulnerablePulse orig, InvulnerablePulse self)
+        {
+            if (Gs.RemoveDamageFlickering) self.pulseDuration = 999;//effectively removes the pulse
+            orig(self);
+        }
+
+        private GameObject OnObjectSpawn(GameObject arg)
         {
             if (arg.name.Contains("Flash") || arg.name.Contains("flash") || arg.name.Contains("White Wave") || arg.name.Contains("Dream Impact"))
             {
+                if (!Gs.RemoveGenericFlashingEffects) return arg;
                 arg.TryGetComponent(out SpriteRenderer sRenderer);
                 arg.TryGetComponent(out MeshRenderer mRenderer);
                 if (mRenderer) mRenderer.enabled = false;
@@ -76,6 +77,7 @@ namespace NoFlashingLights
 
             if (arg.name.Contains("Gas Explosion Recycle"))
             {
+                if (!Gs.ToneDownJellyfishExplosions) return arg;
                 arg.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
             }
 
@@ -86,60 +88,67 @@ namespace NoFlashingLights
         {
             orig(self);
             //Log(self.name);
-            if (self.name.Contains("Tele Out Corpse R(Clone)"))
+            if (self.name.Contains("Tele Out Corpse R(Clone)") && Gs.ToneDownMageLordFight)
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
                 RemoveMageLordFlashes();
             }
             
-            else if (self.name.Contains("Corpse Dream Mage Lord 1(Clone)"))
+            else if (self.name.Contains("Corpse Dream Mage Lord 1(Clone)") && Gs.ToneDownMageLordFight)
             {
                 GameObject secondCorpse = GameObject.Find("Corpse Dream Mage Lord 1(Clone)");
                 secondCorpse.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
                 secondCorpse.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
                 secondCorpse.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
-                Log(secondCorpse.name);
             }
 
             else if (self.name.Contains("End Flash 2"))
             {
-                GameObject endFlashes = GameObject.Find("Corpse Mage Lord 1(Clone)").Child("End Flash");
-                endFlashes.Child("End Flash 1").GetComponent<SpriteRenderer>().enabled = false;
-                endFlashes.Child("End Flash 2").GetComponent<SpriteRenderer>().enabled = false;
-                GameObject fakeQuakeParent = GameObject.Find("Quake Fake Parent");
-                if (fakeQuakeParent != null)
+                if(Gs.ToneDownMageLordFight)
                 {
-                    GameObject fakeQuake = fakeQuakeParent.Child("Knight Get Quake Fake");
-                    fakeQuake.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
-                    fakeQuake.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
-                    fakeQuake.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
+                    GameObject endFlashes = GameObject.Find("Corpse Mage Lord 1(Clone)").Child("End Flash");
+                    endFlashes.Child("End Flash 1").GetComponent<SpriteRenderer>().enabled = false;
+                    endFlashes.Child("End Flash 2").GetComponent<SpriteRenderer>().enabled = false;
+                }
+                
+                if(Gs.RemoveSpellPickupsFlashes)
+                {
+                    GameObject fakeQuakeParent = GameObject.Find("Quake Fake Parent");
+                    if (fakeQuakeParent != null)
+                    {
+                        GameObject fakeQuake = fakeQuakeParent.Child("Knight Get Quake Fake");
+                        fakeQuake.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+                        fakeQuake.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
+                        fakeQuake.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
+                    }
                 }
             }
 
-            else if (self.name.Contains("Gas Explosion Uumuu"))
+            else if (self.name.Contains("Gas Explosion Uumuu") && Gs.ToneDownUumuuFight)
             {
                 _dontDestroyOnLoadScene.FindGameObject("Gas Explosion Uumuu(Clone)").Child("orange flash")
                     .GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (self.name == "Tele Flash")
+            else if (self.name == "Tele Flash" && Gs.ToneDownRadianceFightsFlashes)
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
 
-            else if (self.name == "Radiant Orb(Clone)")
+            else if (self.name == "Radiant Orb(Clone)" && Gs.ToneDownRadianceFightsFlashes)
             {
                 self.gameObject.Child("Impact").GetComponent<MeshRenderer>().enabled = false;
             }
 
-            else if (self.name == "white_solid")
+            else if (self.name == "white_solid" && Gs.ToneDownRadianceFightsFlashes)
             {
+                Log("white_solid");
                 self.gameObject.RemoveComponent<SpriteRenderer>();
                 GameObject bossControl = GameObject.Find("Boss Control");
                 bossControl.Child("Light Solid").RemoveComponent<SpriteRenderer>();
             }
 
-            else if (self.name == "Shade Hit Vignette")
+            else if (self.name == "Shade Hit Vignette" && Gs.ToneDownRadianceFightsFlashes)
             {
                 self.gameObject.GetComponent<SpriteRenderer>().enabled = false;
             }
@@ -147,34 +156,34 @@ namespace NoFlashingLights
             else if (self.name == "Fireball(Clone)" || self.name == "Fireball Top(Clone)" ||
                      self.name == "Fireball2 Top(Clone)" || self.name.Contains("Fireball2 Spiral(Clone)"))
             {
-                self.gameObject.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+                if(Gs.RemoveSpellFlashes) self.gameObject.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (self.name == "Roar Wave Emitter Scream(Clone)")
+            else if (self.name == "Roar Wave Emitter Scream(Clone)" && Gs.RemoveBossScreams)
             {
                 self.gameObject.Child("lines").GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (self.name == "Q Slam")
+            else if (self.name == "Q Slam" && Gs.RemoveSpellFlashes)
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
 
-            else if (self.name == "Death Explode Boss(Clone)")
+            else if (self.name == "Death Explode Boss(Clone)" && Gs.ToneDownDeathExplosions)
             {
                 self.gameObject.GetComponent<ParticleSystemRenderer>().enabled = false;
                 self.gameObject.Child("Splat Explode Orange").GetComponent<SpriteRenderer>().enabled = false;
                 self.gameObject.Child("Orange Flash").GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (self.name == "Roar Wave Emitter(Clone)")
+            else if (self.name == "Roar Wave Emitter(Clone)" && Gs.RemoveBossScreams)
             {
                 self.gameObject.Child("lines").GetComponent<SpriteRenderer>().enabled = false;
                 self.gameObject.Child("wave 1").GetComponent<SpriteRenderer>().enabled = false;
                 self.gameObject.Child("wave 2").GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (self.name.Contains("Ghost Death"))
+            else if (self.name.Contains("Ghost Death") && Gs.ToneDownWarriorDreamsFlashes)
             {
                 if (self.name == "Ghost Death(Clone)")
                 {
@@ -183,14 +192,14 @@ namespace NoFlashingLights
 
                 if (!_ghostExploding)
                 {
-                    _ghostExploding = true;
+                    _ghostExploding = true;//I don't fcking remember why I did that but sure
                     self.gameObject.Child("White Wave").SetActive(false);
                 }
 
                 self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (self.name.Contains("Ghost Warrior"))
+            else if (self.name.Contains("Ghost Warrior") && Gs.ToneDownWarriorDreamsFlashes)
             {
                 self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
                 _dontDestroyOnLoadScene.FindGameObject("Dream Impact(Clone)").GetComponent<MeshRenderer>().enabled =
@@ -199,10 +208,12 @@ namespace NoFlashingLights
 
             else if (self.name == "Silhouette")
             {
+                //TODO identify
+                Log("Silhouette");
                 self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (self.name == "White Flash")
+            else if (self.name == "White Flash" && Gs.RemoveGenericFlashingEffects)
             {
                 self.gameObject.TryGetComponent(out SpriteRenderer sRenderer);
                 if (sRenderer)
@@ -216,37 +227,37 @@ namespace NoFlashingLights
         {
             if (_ghostExploding) _ghostExploding = false;
             
-            if (newScene.name == "Crossroads_ShamanTemple")
+            if (newScene.name == "Crossroads_ShamanTemple" && Gs.RemoveSpellPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveAncestralMoundFlashes());
             }
             
-            else if (newScene.name == "Room_Fungus_Shaman")
+            else if (newScene.name == "Room_Fungus_Shaman" && Gs.RemoveSpellPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveOvergrownMoundFlashes());
             }
             
-            else if (newScene.name == "Ruins1_24")
+            else if (newScene.name == "Ruins1_24" && Gs.RemoveSpellPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveRealQuakeFlashes());
             }
             
-            else if (newScene.name == "Ruins1_24_boss")
+            else if (newScene.name == "Ruins1_24_boss" && (Gs.RemoveSpellPickupsFlashes || Gs.ToneDownMageLordFight))
             {
                 GameManager.instance.StartCoroutine(RemoveFakeQuakeFlashes());
             }
             
-            else if (newScene.name == "Dream_Abyss")
+            else if (newScene.name == "Dream_Abyss" && Gs.ToneDownBirthPlaceFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveBirthPlaceCutsceneFlashes());
             }
             
-            else if (newScene.name == "Abyss_15")
+            else if (newScene.name == "Abyss_15" && Gs.ToneDownBirthPlaceFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveBirthPlaceTriggerFlashes());
             }
             
-            else if (newScene.name.Contains("GG_End_Sequence"))
+            else if (newScene.name.Contains("GG_End_Sequence") && Gs.RemovePantheonCompletionFlashes)
             {
                 SpriteRenderer[] orbFlashes =
                     GameObject.Find("Big Orb Flash").GetComponentsInChildren<SpriteRenderer>();
@@ -266,7 +277,7 @@ namespace NoFlashingLights
                 }
             }
 
-            else if (newScene.name == "Deepnest_East_Hornet")
+            else if (newScene.name == "Deepnest_East_Hornet" && Gs.ToneDownHornet2Fight)
             {
                 IEnumerable<GameObject> blizzardParticles =
                     newScene.GetAllGameObjects().Where(o => o.name.Contains("blizzard_particles"));
@@ -276,7 +287,7 @@ namespace NoFlashingLights
                 }
             }
 
-            else if (newScene.name == "Dream_Final_boss")
+            else if (newScene.name == "Dream_Final_boss" && Gs.ToneDownRadianceFightsFlashes)
             {
                 GameObject.Find("Boss Control").Child("Radiance Roar").RemoveComponent<SpriteFlash>();
             }
@@ -285,7 +296,7 @@ namespace NoFlashingLights
         private bool OnEnableEnemy(GameObject enemy, bool isalreadydead)
         {
             //Log(enemy.name);
-            if (enemy.name.Contains("Absolute Radiance"))
+            if (enemy.name.Contains("Absolute Radiance") && Gs.ToneDownRadianceFightsFlashes)
             {
                 enemy.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
                 enemy.Child("Slash Impact").GetComponent<MeshRenderer>().enabled = false;
@@ -305,14 +316,14 @@ namespace NoFlashingLights
                 }
             }
 
-            else if (enemy.name == "Mage Lord")
+            else if (enemy.name == "Mage Lord" && Gs.ToneDownRadianceFightsFlashes)
             {
                 enemy.Child("Appear Flash").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
                 enemy.Child("Fire Effect").GetComponent<MeshRenderer>().enabled = false;
             }
             
-            else if (enemy.name == "Dream Mage Lord")
+            else if (enemy.name == "Dream Mage Lord" && Gs.ToneDownMageLordFight)
             {
                 GameObject appearFlash = enemy.Child("Appear Flash");
                 GameObject whiteFlash = enemy.Child("White Flash");
@@ -327,12 +338,12 @@ namespace NoFlashingLights
                 fireEffect.GetComponent<PlayMakerFSM>().enabled = false;
             }
 
-            else if (enemy.name.Contains("Mega Jellyfish"))
+            else if (enemy.name.Contains("Mega Jellyfish") && Gs.ToneDownUumuuFight)
             {
                 enemy.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
             }
 
-            else if (enemy.name == "Radiance")
+            else if (enemy.name == "Radiance" && Gs.ToneDownRadianceFightsFlashes)
             {
                 enemy.Child("Slash Impact").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("Final Impact").GetComponent<MeshRenderer>().enabled = false;
@@ -342,14 +353,14 @@ namespace NoFlashingLights
                 enemy.Child("Death").Child("Knight Split").GetComponent<MeshRenderer>().enabled = false;
             }
 
-            else if (enemy.name == "Mage Lord Phase2")
+            else if (enemy.name == "Mage Lord Phase2" && Gs.ToneDownMageLordFight)
             {
                 enemy.Child("Appear Flash").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("Quake Pillar").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("Quake Blast").GetComponent<MeshRenderer>().enabled = false;
             }
             
-            else if (enemy.name == "Dream Mage Lord Phase2")
+            else if (enemy.name == "Dream Mage Lord Phase2" && Gs.ToneDownMageLordFight)
             {
                 GameObject appearFlash = enemy.Child("Appear Flash");
                 GameObject quakePillar = enemy.Child("Quake Pillar");
@@ -379,15 +390,21 @@ namespace NoFlashingLights
         private void RemoveHeroFlashes()
         {
             GameObject knight = GameObject.Find("Knight");
-            knight.Child("white_light_donut").GetComponent<SpriteRenderer>().enabled = false; 
+            if(Gs.RemoveGenericHeroFlashes) knight.Child("white_light_donut").GetComponent<SpriteRenderer>().enabled = false; 
 
-            GameObject spells = knight.Child("Spells");
-            spells.Child("Q Flash Slam").GetComponent<SpriteRenderer>().enabled = false;
-            spells.Child("Q Flash Start").GetComponent<SpriteRenderer>().enabled = false;
-            spells.Child("Q Slam 2").GetComponent<MeshRenderer>().enabled = false;
+            if(Gs.RemoveSpellFlashes)
+            {
+                GameObject spells = knight.Child("Spells");
+                spells.Child("Q Flash Slam").GetComponent<SpriteRenderer>().enabled = false;
+                spells.Child("Q Flash Start").GetComponent<SpriteRenderer>().enabled = false;
+                spells.Child("Q Slam 2").GetComponent<MeshRenderer>().enabled = false;
+            }
 
-            GameObject focusEffects = knight.Child("Focus Effects");
-            focusEffects.Child("Heal Anim").GetComponent<MeshRenderer>().enabled = false;
+            if(Gs.RemoveHealFlashes)
+            {
+                GameObject focusEffects = knight.Child("Focus Effects");
+                focusEffects.Child("Heal Anim").GetComponent<MeshRenderer>().enabled = false;
+            }
 
             GameObject effects = knight.Child("Effects");
             List<GameObject> flashesInKnight = new List<GameObject>();
@@ -403,11 +420,11 @@ namespace NoFlashingLights
 
             foreach (var knightFlash in flashesInKnight)
             {
-                if (knightFlash.name.Contains("SD Sharp Flash"))
+                if (knightFlash.name.Contains("SD Sharp Flash") && Gs.RemoveCrystalDashFlashes)
                 {
                     knightFlash.GetComponent<MeshRenderer>().enabled = false;
                 }
-                else
+                else if (Gs.RemoveGenericHeroFlashes)
                 {
                     knightFlash.GetComponent<SpriteRenderer>().enabled = false;
                 }
@@ -423,14 +440,18 @@ namespace NoFlashingLights
                 }
             }
 
-            foreach (var poolFlash in flashesInPool)
+            if (Gs.RemoveGenericHeroFlashes)
             {
-                poolFlash.GetComponent<SpriteRenderer>().enabled = false;
+                foreach (var poolFlash in flashesInPool)
+                {
+                    poolFlash.GetComponent<SpriteRenderer>().enabled = false;
+                }
             }
         }
 
         private void RemoveMageLordFlashes()
         {
+            if (!Gs.ToneDownMageLordFight) return;
             IEnumerable<GameObject> whiteFlashes = _dontDestroyOnLoadScene.GetAllGameObjects()
                 .Where(o => o.name.Contains("White Flash R"));
             IEnumerable<GameObject> appearFlashes = _dontDestroyOnLoadScene.GetAllGameObjects()

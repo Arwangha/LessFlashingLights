@@ -63,8 +63,8 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.RemoveHealFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove miscellaneous knight-related flashes",
-                description: "Toggle for generic flash effects caught by a wide filter",
+                name: "Remove misc. knight flashes",
+                description: "Toggle for miscellaneous flash effects caught by a generic filter",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveGenericHeroFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemoveGenericHeroFlashes ? 0 : 1),
@@ -72,8 +72,8 @@ public static class ModMenu
             new TextPanel(name: "Boss-specific effects"),
             
             new HorizontalOption(
-                name: "Tone down Soul Master & Soul Tyrant fight",
-                description: "notably teleportation, spells and fake death",
+                name: "Tone down Soul Master/Tyrant",
+                description: "notably teleportation, spells and fake death. Includes Soul Tyrant",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.ToneDownMageLordFight = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.ToneDownMageLordFight ? 0 : 1),
@@ -93,15 +93,15 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.ToneDownDeathExplosions ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down boss warrior dreams fights",
+                name: "Tone down warrior dreams",
                 description: "Targets their teleportation and deaths",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.ToneDownWarriorDreamsFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.ToneDownWarriorDreamsFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down Radiance & absrad fights",
-                description: "Targets their attacks, teleportation and death",
+                name: "Tone down Radiance fights",
+                description: "Targets attacks, teleportation and death. Absrad included",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.ToneDownRadianceFightsFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.ToneDownRadianceFightsFlashes ? 0 : 1),
@@ -114,7 +114,7 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.ToneDownUumuuFight ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down Hornet Sentinel's fight",
+                name: "Tone down Hornet 2 fight",
                 description: "Reduces the wind intensity",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.ToneDownHornet2Fight = index == 0; },
@@ -123,7 +123,7 @@ public static class ModMenu
             new TextPanel(name: "Miscellaneous effects"),
             
             new HorizontalOption(
-                name: "Tone down birthplace cutscene flashes",
+                name: "Tone down birthplace flashes",
                 description: "Reduces dream nail impact and ledge grab flashes",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.ToneDownBirthPlaceFlashes = index == 0; },
@@ -137,21 +137,21 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.ToneDownJellyfishExplosions ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down pantheon completion screens",
+                name: "Tone down pantheon victories",
                 description: "Targets flashes on the completion & bindings cutscene",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemovePantheonCompletionFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemovePantheonCompletionFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Removes dream statues variants switch flashes",
-                description: "Targets flashes when hitting a dream lever in hall of gods",
+                name: "Remove dream lever anims",
+                description: "Targets the flashes when hitting a dream lever in hall of gods",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.ToneDownGodhomeDreamStatues = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.ToneDownGodhomeDreamStatues ? 0 : 1),
             
             new HorizontalOption(
-                name: "Removes miscellaneous effects",
+                name: "Remove miscellaneous effects",
                 description: "Targets other flashes caught by a generic filter",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveGenericFlashingEffects = index == 0; },
