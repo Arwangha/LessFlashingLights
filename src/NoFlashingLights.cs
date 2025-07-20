@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.10.2";
+        public override string GetVersion() => "0.10.3";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -57,16 +57,6 @@ namespace NoFlashingLights
             On.EnemyHitEffectsUninfected.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveUninfectedHitEffect;
         }
 
-        private void OnDreamPlantOrbStart(On.DreamPlantOrb.orig_Start orig, DreamPlantOrb self)
-        {
-            self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
-            GameObject pickupAnim = self.gameObject.Child("PickupAnim");
-            pickupAnim.GetComponent<SpriteRenderer>().enabled = false;
-            pickupAnim.GetComponent<BasicSpriteAnimator>().enabled = false;
-            orig(self);
-        }
-
-
         public void Unload()
         {
             On.HeroController.Awake -= OnHeroAwake;
@@ -77,6 +67,38 @@ namespace NoFlashingLights
             On.InvulnerablePulse.startInvulnerablePulse -= OnInvulnerablePulse;
             On.WaveEffectControl.OnEnable -= OnWaveEffectStart;
             On.BossStatueDreamToggle.Fade -= OnDreamToggleFade;
+            On.DreamPlantOrb.Start -= OnDreamPlantOrbStart;
+            
+            On.SpriteFlash.flashArmoured -= FlashHandler.OnFlashArmoured;
+            On.SpriteFlash.flashBenchRest -= FlashHandler.OnFlashBench;
+            On.SpriteFlash.flashDreamImpact -= FlashHandler.OnFlashDream;
+            On.SpriteFlash.flashDungQuick -= FlashHandler.OnFlashDungQuick;
+            On.SpriteFlash.flashFocusGet -= FlashHandler.OnFlashFocusGet;
+            On.SpriteFlash.flashFocusHeal -= FlashHandler.OnFlashHeal;
+            On.SpriteFlash.FlashGrimmflame -= FlashHandler.OnFlashGrimmFlame;
+            On.SpriteFlash.FlashGrimmHit -= FlashHandler.OnFlashGrimmHit;
+            On.SpriteFlash.flashHealBlue -= FlashHandler.OnFlashHealBlue;
+            On.SpriteFlash.flashInfected -= FlashHandler.OnFlashInfected;
+            On.SpriteFlash.FlashingGhostWounded -= FlashHandler.OnFlashingGhostWounded;
+            On.SpriteFlash.FlashingSuperDash -= FlashHandler.OnFlashSuperDash;
+            On.SpriteFlash.flashShadeGet -= FlashHandler.OnFlashShadeGet;
+            On.SpriteFlash.flashSporeQuick -= FlashHandler.OnFlashSpore;
+            On.SpriteFlash.flashWhitePulse -= FlashHandler.OnFlashWhitePulse;
+
+            On.EnemyHitEffectsGhost.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveGhostHitEffect;
+            On.EnemyHitEffectsBlackKnight.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveBlackKnightHitEffect;
+            On.EnemyHitEffectsArmoured.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveArmouredHitEffect;
+            On.EnemyHitEffectsShade.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveShadeHitEffect;
+            On.EnemyHitEffectsUninfected.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveUninfectedHitEffect;
+        }
+        
+        private void OnDreamPlantOrbStart(On.DreamPlantOrb.orig_Start orig, DreamPlantOrb self)
+        {
+            self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+            GameObject pickupAnim = self.gameObject.Child("PickupAnim");
+            pickupAnim.GetComponent<SpriteRenderer>().enabled = false;
+            pickupAnim.GetComponent<BasicSpriteAnimator>().enabled = false;
+            orig(self);
         }
 
         private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
@@ -501,6 +523,14 @@ namespace NoFlashingLights
                     poolFlash.GetComponent<SpriteRenderer>().enabled = false;
                 }
             }
+
+            GameObject SDBurst = _dontDestroyOnLoadScene.FindGameObject("SD Burst");
+            SDBurst.GetComponent<MeshRenderer>().enabled = false;
+            SDBurst.GetComponent<PlayMakerFSM>().enabled = false;
+            
+            GameObject soulOrb = _dontDestroyOnLoadScene.FindGameObject("_GameCameras/HudCamera/Hud Canvas/Soul Orb");
+            soulOrb.GetComponent<SpriteRenderer>().enabled = false;
+            soulOrb.GetComponent<PlayMakerFSM>().enabled = false;
         }
 
         private void RemoveMageLordFlashes()

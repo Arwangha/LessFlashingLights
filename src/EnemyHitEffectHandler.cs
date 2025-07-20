@@ -1,7 +1,7 @@
 using UnityEngine;
 namespace NoFlashingLights;
 
-public class EnemyHitEffectHandler
+public static class EnemyHitEffectHandler
 {
     public static void OnReceiveGhostHitEffect(On.EnemyHitEffectsGhost.orig_RecieveHitEffect orig, EnemyHitEffectsGhost self, float attackDirection)
     {
