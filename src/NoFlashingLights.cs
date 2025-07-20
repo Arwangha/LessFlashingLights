@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.8.4";
+        public override string GetVersion() => "0.10.2";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -32,8 +32,41 @@ namespace NoFlashingLights
             On.InvulnerablePulse.startInvulnerablePulse += OnInvulnerablePulse;
             On.WaveEffectControl.OnEnable += OnWaveEffectStart;
             On.BossStatueDreamToggle.Fade += OnDreamToggleFade;
+            On.DreamPlantOrb.Start += OnDreamPlantOrbStart;
+            
+            On.SpriteFlash.flashArmoured += FlashHandler.OnFlashArmoured;
+            On.SpriteFlash.flashBenchRest += FlashHandler.OnFlashBench;
+            On.SpriteFlash.flashDreamImpact += FlashHandler.OnFlashDream;
+            On.SpriteFlash.flashDungQuick += FlashHandler.OnFlashDungQuick;
+            On.SpriteFlash.flashFocusGet += FlashHandler.OnFlashFocusGet;
+            On.SpriteFlash.flashFocusHeal += FlashHandler.OnFlashHeal;
+            On.SpriteFlash.FlashGrimmflame += FlashHandler.OnFlashGrimmFlame;
+            On.SpriteFlash.FlashGrimmHit += FlashHandler.OnFlashGrimmHit;
+            On.SpriteFlash.flashHealBlue += FlashHandler.OnFlashHealBlue;
+            On.SpriteFlash.flashInfected += FlashHandler.OnFlashInfected;
+            On.SpriteFlash.FlashingGhostWounded += FlashHandler.OnFlashingGhostWounded;
+            On.SpriteFlash.FlashingSuperDash += FlashHandler.OnFlashSuperDash;
+            On.SpriteFlash.flashShadeGet += FlashHandler.OnFlashShadeGet;
+            On.SpriteFlash.flashSporeQuick += FlashHandler.OnFlashSpore;
+            On.SpriteFlash.flashWhitePulse += FlashHandler.OnFlashWhitePulse;
+
+            On.EnemyHitEffectsGhost.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveGhostHitEffect;
+            On.EnemyHitEffectsBlackKnight.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveBlackKnightHitEffect;
+            On.EnemyHitEffectsArmoured.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveArmouredHitEffect;
+            On.EnemyHitEffectsShade.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveShadeHitEffect;
+            On.EnemyHitEffectsUninfected.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveUninfectedHitEffect;
         }
-        
+
+        private void OnDreamPlantOrbStart(On.DreamPlantOrb.orig_Start orig, DreamPlantOrb self)
+        {
+            self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+            GameObject pickupAnim = self.gameObject.Child("PickupAnim");
+            pickupAnim.GetComponent<SpriteRenderer>().enabled = false;
+            pickupAnim.GetComponent<BasicSpriteAnimator>().enabled = false;
+            orig(self);
+        }
+
+
         public void Unload()
         {
             On.HeroController.Awake -= OnHeroAwake;
@@ -291,6 +324,11 @@ namespace NoFlashingLights
             {
                 GameObject.Find("Boss Control").Child("Radiance Roar").RemoveComponent<SpriteFlash>();
             }
+            
+            else if (newScene.name == "Cliffs_06")//grimm lantern
+            {
+                GameManager.instance.StartCoroutine(RemoveGrimmLanternFlashes());
+            }
         }
 
         private bool OnEnableEnemy(GameObject enemy, bool isalreadydead)
@@ -374,6 +412,20 @@ namespace NoFlashingLights
                 quakePillar.GetComponent<PlayMakerFSM>().enabled = false;
                 quakeBlast.GetComponent<PlayMakerFSM>().enabled = false;
             }
+            
+            else if (enemy.name.Contains("Flamebearer"))//grimmkin 
+            {
+                GameObject redFlash = enemy.gameObject.Child("Red Flash 1");
+                redFlash.GetComponent<SimpleSpriteFade>().enabled = false;
+                redFlash.GetComponent<SpriteRenderer>().enabled = false;
+                Log("removing grimmkin warp flash");
+            }
+            
+            else if (enemy.name.Contains("Mage Knight"))
+            {
+                GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
+                fireEffect.GetComponent<MeshRenderer>().enabled = false;
+            }
 
             return isalreadydead;
         }
@@ -427,6 +479,8 @@ namespace NoFlashingLights
                 else if (Gs.RemoveGenericHeroFlashes)
                 {
                     knightFlash.GetComponent<SpriteRenderer>().enabled = false;
+                    bool hasFSM = knightFlash.TryGetComponent<PlayMakerFSM>(out var flashFSM);
+                    if(hasFSM) flashFSM.enabled = false;
                 }
             }
 
@@ -586,6 +640,40 @@ namespace NoFlashingLights
                 impact.GetComponent<PlayMakerFSM>().enabled = false;
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
                 whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
+            }
+        }
+
+        private IEnumerator RemoveGrimmLanternFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject sycophantHitFlash = GameObject.Find("Sycophant Dream").Child("Hit Flash");
+            if (sycophantHitFlash)
+            {
+                sycophantHitFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                sycophantHitFlash.GetComponent<SpriteRenderer>().enabled = false;
+                Log("removing lantern flashes 1");
+            }
+            
+            GameObject grimmBrazier = GameObject.Find("/Nightmare Lantern/lantern_dream/big_lantern/grimm_brazier");
+            if (grimmBrazier)
+            {
+                GameObject lightFlash = grimmBrazier.Child("Light Flash");
+                GameObject sharpFlash = grimmBrazier.Child("Sharp Flash");
+
+                if (lightFlash)
+                {
+                    lightFlash.GetComponent<SpriteRenderer>().enabled = false;
+                    lightFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                    Log("removing lantern flashes 2");
+                }
+
+                if (sharpFlash)
+                {
+                    sharpFlash.GetComponent<MeshRenderer>().enabled = false;
+                    sharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                    Log("removing lantern flashes 3");
+                }
             }
         }
 
