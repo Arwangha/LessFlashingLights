@@ -66,7 +66,7 @@ public static class FlashHandler
     public static void OnFlashFocusGet(On.SpriteFlash.orig_flashFocusGet orig, SpriteFlash self)//when getting enough soul to focus
     {
         Modding.Logger.Log("OnFlashFocusGet");
-        orig(self);
+        //orig(self);
     }
 
     public static void OnFlashDungQuick(On.SpriteFlash.orig_flashDungQuick orig, SpriteFlash self)//hitting something with crest
@@ -90,6 +90,6 @@ public static class FlashHandler
     public static void OnFlashArmoured(On.SpriteFlash.orig_flashArmoured orig, SpriteFlash self)//false knight
     {
         Modding.Logger.Log("OnFlashArmoured");
-        orig(self);
+        //orig(self);
     }
 }

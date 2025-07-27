@@ -20,7 +20,7 @@ namespace NoFlashingLights
         
         private Scene _dontDestroyOnLoadScene;
         private GameObject? _emptyGo;
-        private bool _ghostExploding;
+        private bool _ghostExploding;//I do not remember what was the logic behind this but I'm too scared to remove it
 
         public override void Initialize()
         {
@@ -33,6 +33,8 @@ namespace NoFlashingLights
             On.WaveEffectControl.OnEnable += OnWaveEffectStart;
             On.BossStatueDreamToggle.Fade += OnDreamToggleFade;
             On.DreamPlantOrb.Start += OnDreamPlantOrbStart;
+            On.BossStatueTrophyPlaque.DoTierCompleteEffect += OnBossTrophyTierCompleteEffect;
+            On.BossStatueFlashEffect.FlashRoutine += OnBossStatueFlashRoutine;
             
             On.SpriteFlash.flashArmoured += FlashHandler.OnFlashArmoured;
             On.SpriteFlash.flashBenchRest += FlashHandler.OnFlashBench;
@@ -49,12 +51,6 @@ namespace NoFlashingLights
             On.SpriteFlash.flashShadeGet += FlashHandler.OnFlashShadeGet;
             On.SpriteFlash.flashSporeQuick += FlashHandler.OnFlashSpore;
             On.SpriteFlash.flashWhitePulse += FlashHandler.OnFlashWhitePulse;
-
-            On.EnemyHitEffectsGhost.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveGhostHitEffect;
-            On.EnemyHitEffectsBlackKnight.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveBlackKnightHitEffect;
-            On.EnemyHitEffectsArmoured.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveArmouredHitEffect;
-            On.EnemyHitEffectsShade.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveShadeHitEffect;
-            On.EnemyHitEffectsUninfected.RecieveHitEffect += EnemyHitEffectHandler.OnReceiveUninfectedHitEffect;
         }
 
         public void Unload()
@@ -68,6 +64,8 @@ namespace NoFlashingLights
             On.WaveEffectControl.OnEnable -= OnWaveEffectStart;
             On.BossStatueDreamToggle.Fade -= OnDreamToggleFade;
             On.DreamPlantOrb.Start -= OnDreamPlantOrbStart;
+            On.BossStatueTrophyPlaque.DoTierCompleteEffect -= OnBossTrophyTierCompleteEffect;
+            On.BossStatueFlashEffect.FlashRoutine -= OnBossStatueFlashRoutine;
             
             On.SpriteFlash.flashArmoured -= FlashHandler.OnFlashArmoured;
             On.SpriteFlash.flashBenchRest -= FlashHandler.OnFlashBench;
@@ -84,12 +82,20 @@ namespace NoFlashingLights
             On.SpriteFlash.flashShadeGet -= FlashHandler.OnFlashShadeGet;
             On.SpriteFlash.flashSporeQuick -= FlashHandler.OnFlashSpore;
             On.SpriteFlash.flashWhitePulse -= FlashHandler.OnFlashWhitePulse;
+        }
+        
+        
+        private void OnBossTrophyTierCompleteEffect(On.BossStatueTrophyPlaque.orig_DoTierCompleteEffect orig, BossStatueTrophyPlaque self, BossStatueTrophyPlaque.DisplayType type)
+        {
+            Log("OnBossTrophyTierCompleteEffect");
+            //orig(self, type);
+        }
 
-            On.EnemyHitEffectsGhost.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveGhostHitEffect;
-            On.EnemyHitEffectsBlackKnight.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveBlackKnightHitEffect;
-            On.EnemyHitEffectsArmoured.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveArmouredHitEffect;
-            On.EnemyHitEffectsShade.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveShadeHitEffect;
-            On.EnemyHitEffectsUninfected.RecieveHitEffect -= EnemyHitEffectHandler.OnReceiveUninfectedHitEffect;
+        private IEnumerator OnBossStatueFlashRoutine(On.BossStatueFlashEffect.orig_FlashRoutine orig, BossStatueFlashEffect self)
+        {
+            Log("boss statue flash routine");//boss statue spawn
+            self.transform.Translate(new Vector3(2000f, 0f, 0f));
+            yield return orig(self);
         }
         
         private void OnDreamPlantOrbStart(On.DreamPlantOrb.orig_Start orig, DreamPlantOrb self)
@@ -351,6 +357,11 @@ namespace NoFlashingLights
             {
                 GameManager.instance.StartCoroutine(RemoveGrimmLanternFlashes());
             }
+            
+            else if (newScene.name == "GG_Workshop")
+            {
+                GameManager.instance.StartCoroutine(RemoveGodHomeStatueRewardFlashes());
+            }
         }
 
         private bool OnEnableEnemy(GameObject enemy, bool isalreadydead)
@@ -486,7 +497,8 @@ namespace NoFlashingLights
             {
                 if (flashEffect.gameObject.name.Contains("White Flash") ||
                     flashEffect.gameObject.name.Contains("SD Burst Glow") ||
-                    flashEffect.gameObject.name.Contains("SD Sharp Flash"))
+                    flashEffect.gameObject.name.Contains("SD Sharp Flash") ||
+                    flashEffect.gameObject.name.Contains("Soul Burst"))
                 {
                     flashesInKnight.Add(flashEffect.gameObject);
                 }
@@ -524,11 +536,11 @@ namespace NoFlashingLights
                 }
             }
 
-            GameObject SDBurst = _dontDestroyOnLoadScene.FindGameObject("SD Burst");
+            GameObject SDBurst = _dontDestroyOnLoadScene.FindGameObject("Knight/Effects/SD Burst");
             SDBurst.GetComponent<MeshRenderer>().enabled = false;
             SDBurst.GetComponent<PlayMakerFSM>().enabled = false;
             
-            GameObject soulOrb = _dontDestroyOnLoadScene.FindGameObject("_GameCameras/HudCamera/Hud Canvas/Soul Orb");
+            GameObject soulOrb = _dontDestroyOnLoadScene.FindGameObject("_GameCameras/HudCamera/Hud Canvas/Soul Orb/White Flash");
             soulOrb.GetComponent<SpriteRenderer>().enabled = false;
             soulOrb.GetComponent<PlayMakerFSM>().enabled = false;
         }
@@ -671,6 +683,16 @@ namespace NoFlashingLights
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
                 whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
             }
+        }
+
+        private IEnumerator RemoveGodHomeStatueRewardFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject award = GameObject.Find("GG_statue_award_attuned");
+            GameObject awardclone = GameObject.Find("GG_statue_award_attuned(Clone)");
+            Log(award == null);
+            Log(awardclone == null);
         }
 
         private IEnumerator RemoveGrimmLanternFlashes()
