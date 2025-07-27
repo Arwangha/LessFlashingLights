@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.10.3";
+        public override string GetVersion() => "0.11.0";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -24,11 +24,12 @@ namespace NoFlashingLights
 
         public override void Initialize()
         {
-            On.HeroController.Awake += OnHeroAwake;
-            On.PlayMakerFSM.OnEnable += OnFsmEnable;
             ModHooks.OnEnableEnemyHook += OnEnableEnemy;
             ModHooks.ObjectPoolSpawnHook += OnObjectSpawn;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged += OnSceneChange;
+            
+            On.HeroController.Awake += OnHeroAwake;
+            On.PlayMakerFSM.OnEnable += OnFsmEnable;
             On.InvulnerablePulse.startInvulnerablePulse += OnInvulnerablePulse;
             On.WaveEffectControl.OnEnable += OnWaveEffectStart;
             On.BossStatueDreamToggle.Fade += OnDreamToggleFade;
@@ -46,7 +47,6 @@ namespace NoFlashingLights
             On.SpriteFlash.FlashGrimmHit += FlashHandler.OnFlashGrimmHit;
             On.SpriteFlash.flashHealBlue += FlashHandler.OnFlashHealBlue;
             On.SpriteFlash.flashInfected += FlashHandler.OnFlashInfected;
-            On.SpriteFlash.FlashingGhostWounded += FlashHandler.OnFlashingGhostWounded;
             On.SpriteFlash.FlashingSuperDash += FlashHandler.OnFlashSuperDash;
             On.SpriteFlash.flashShadeGet += FlashHandler.OnFlashShadeGet;
             On.SpriteFlash.flashSporeQuick += FlashHandler.OnFlashSpore;
@@ -55,11 +55,12 @@ namespace NoFlashingLights
 
         public void Unload()
         {
-            On.HeroController.Awake -= OnHeroAwake;
-            On.PlayMakerFSM.OnEnable -= OnFsmEnable;
             ModHooks.OnEnableEnemyHook -= OnEnableEnemy;
             ModHooks.ObjectPoolSpawnHook -= OnObjectSpawn;
             UnityEngine.SceneManagement.SceneManager.activeSceneChanged -= OnSceneChange;
+            
+            On.HeroController.Awake -= OnHeroAwake;
+            On.PlayMakerFSM.OnEnable -= OnFsmEnable;
             On.InvulnerablePulse.startInvulnerablePulse -= OnInvulnerablePulse;
             On.WaveEffectControl.OnEnable -= OnWaveEffectStart;
             On.BossStatueDreamToggle.Fade -= OnDreamToggleFade;
@@ -77,7 +78,6 @@ namespace NoFlashingLights
             On.SpriteFlash.FlashGrimmHit -= FlashHandler.OnFlashGrimmHit;
             On.SpriteFlash.flashHealBlue -= FlashHandler.OnFlashHealBlue;
             On.SpriteFlash.flashInfected -= FlashHandler.OnFlashInfected;
-            On.SpriteFlash.FlashingGhostWounded -= FlashHandler.OnFlashingGhostWounded;
             On.SpriteFlash.FlashingSuperDash -= FlashHandler.OnFlashSuperDash;
             On.SpriteFlash.flashShadeGet -= FlashHandler.OnFlashShadeGet;
             On.SpriteFlash.flashSporeQuick -= FlashHandler.OnFlashSpore;
@@ -87,30 +87,32 @@ namespace NoFlashingLights
         
         private void OnBossTrophyTierCompleteEffect(On.BossStatueTrophyPlaque.orig_DoTierCompleteEffect orig, BossStatueTrophyPlaque self, BossStatueTrophyPlaque.DisplayType type)
         {
-            Log("OnBossTrophyTierCompleteEffect");
-            //orig(self, type);
+            if(!Gs.ToneDownGodhomeStatues) orig(self, type);
         }
 
         private IEnumerator OnBossStatueFlashRoutine(On.BossStatueFlashEffect.orig_FlashRoutine orig, BossStatueFlashEffect self)
         {
-            Log("boss statue flash routine");//boss statue spawn
-            self.transform.Translate(new Vector3(2000f, 0f, 0f));
+            if(Gs.ToneDownGodhomeStatues) self.transform.Translate(new Vector3(2000f, 0f, 0f));//yeet the animation offscreen
             yield return orig(self);
+        }
+        
+        
+        private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
+        {
+            if (Gs.ToneDownGodhomeStatues) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
+            yield return orig(self, usingDreamVersion);
         }
         
         private void OnDreamPlantOrbStart(On.DreamPlantOrb.orig_Start orig, DreamPlantOrb self)
         {
-            self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
-            GameObject pickupAnim = self.gameObject.Child("PickupAnim");
-            pickupAnim.GetComponent<SpriteRenderer>().enabled = false;
-            pickupAnim.GetComponent<BasicSpriteAnimator>().enabled = false;
+            if(Gs.ToneDownDreamOrbs)
+            {
+                self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+                GameObject pickupAnim = self.gameObject.Child("PickupAnim");
+                pickupAnim.GetComponent<SpriteRenderer>().enabled = false;
+                pickupAnim.GetComponent<BasicSpriteAnimator>().enabled = false;
+            }
             orig(self);
-        }
-
-        private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
-        {
-            if (Gs.ToneDownGodhomeDreamStatues) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
-            yield return orig(self, usingDreamVersion);
         }
 
         private void OnWaveEffectStart(On.WaveEffectControl.orig_OnEnable orig, WaveEffectControl self)
@@ -253,7 +255,7 @@ namespace NoFlashingLights
 
                 if (!_ghostExploding)
                 {
-                    _ghostExploding = true;//I don't fcking remember why I did that but sure
+                    _ghostExploding = true;//I don't remember why I did that but sure
                     self.gameObject.Child("White Wave").SetActive(false);
                 }
 
@@ -353,14 +355,9 @@ namespace NoFlashingLights
                 GameObject.Find("Boss Control").Child("Radiance Roar").RemoveComponent<SpriteFlash>();
             }
             
-            else if (newScene.name == "Cliffs_06")//grimm lantern
+            else if (newScene.name == "Cliffs_06" && Gs.ToneDownGrimmLanternActivation)//grimm lantern
             {
                 GameManager.instance.StartCoroutine(RemoveGrimmLanternFlashes());
-            }
-            
-            else if (newScene.name == "GG_Workshop")
-            {
-                GameManager.instance.StartCoroutine(RemoveGodHomeStatueRewardFlashes());
             }
         }
 
@@ -446,7 +443,7 @@ namespace NoFlashingLights
                 quakeBlast.GetComponent<PlayMakerFSM>().enabled = false;
             }
             
-            else if (enemy.name.Contains("Flamebearer"))//grimmkin 
+            else if (enemy.name.Contains("Flamebearer") && Gs.ToneDownGrimmKinFights)//grimmkin 
             {
                 GameObject redFlash = enemy.gameObject.Child("Red Flash 1");
                 redFlash.GetComponent<SimpleSpriteFade>().enabled = false;
@@ -454,7 +451,7 @@ namespace NoFlashingLights
                 Log("removing grimmkin warp flash");
             }
             
-            else if (enemy.name.Contains("Mage Knight"))
+            else if (enemy.name.Contains("Mage Knight") && Gs.ToneDownMageLordFight)//soul warrior but eh
             {
                 GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;
@@ -536,13 +533,20 @@ namespace NoFlashingLights
                 }
             }
 
-            GameObject SDBurst = _dontDestroyOnLoadScene.FindGameObject("Knight/Effects/SD Burst");
-            SDBurst.GetComponent<MeshRenderer>().enabled = false;
-            SDBurst.GetComponent<PlayMakerFSM>().enabled = false;
+            if(Gs.RemoveCrystalDashFlashes)
+            {
+                GameObject SDBurst = _dontDestroyOnLoadScene.FindGameObject("Knight/Effects/SD Burst");
+                SDBurst.GetComponent<MeshRenderer>().enabled = false;
+                SDBurst.GetComponent<PlayMakerFSM>().enabled = false;
+            }
             
-            GameObject soulOrb = _dontDestroyOnLoadScene.FindGameObject("_GameCameras/HudCamera/Hud Canvas/Soul Orb/White Flash");
-            soulOrb.GetComponent<SpriteRenderer>().enabled = false;
-            soulOrb.GetComponent<PlayMakerFSM>().enabled = false;
+            if(Gs.RemoveSoulOrbFlashes)
+            {
+                GameObject soulOrb =
+                    _dontDestroyOnLoadScene.FindGameObject("_GameCameras/HudCamera/Hud Canvas/Soul Orb/White Flash");
+                soulOrb.GetComponent<SpriteRenderer>().enabled = false;
+                soulOrb.GetComponent<PlayMakerFSM>().enabled = false;
+            }
         }
 
         private void RemoveMageLordFlashes()
@@ -683,16 +687,6 @@ namespace NoFlashingLights
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
                 whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
             }
-        }
-
-        private IEnumerator RemoveGodHomeStatueRewardFlashes()
-        {
-            yield return new WaitForFinishedEnteringScene();
-            
-            GameObject award = GameObject.Find("GG_statue_award_attuned");
-            GameObject awardclone = GameObject.Find("GG_statue_award_attuned(Clone)");
-            Log(award == null);
-            Log(awardclone == null);
         }
 
         private IEnumerator RemoveGrimmLanternFlashes()

@@ -2,8 +2,15 @@ namespace NoFlashingLights;
 
 public class GlobalSettings
 {
-    public bool ToneDownGodhomeDreamStatues = true;
+    public bool ToneDownGodhomeStatues = true;
+    public bool ToneDownDreamOrbs = true;
+    public bool RemoveInfectedHitFlashes = true;
+    public bool RemoveLifebloodCollectionFlashes = true;
     public bool RemoveDamageFlickering = true;
+    public bool RemoveGrimmChildHitFlashes = true;
+    public bool RemoveGenericEnemyHitFlashes = true;
+    public bool ToneDownGrimmKinFights = true;
+    public bool ToneDownGrimmLanternActivation = true;
     public bool RemoveGenericFlashingEffects = true;
     public bool ToneDownJellyfishExplosions = true;
     public bool ToneDownMageLordFight = true;
@@ -20,5 +27,9 @@ public class GlobalSettings
     public bool RemoveCrystalDashFlashes = true;
     public bool RemoveNailArtsFlashes = true;
     public bool RemoveHealFlashes = true;
+    public bool RemoveSoulOrbFlashes = true;
+    public bool RemoveSporeShroomFlashes = true;
+    public bool RemoveCrestFlashes = true;
+    public bool RemoveShadeGetFlashes = true;
     public bool RemoveGenericHeroFlashes = true;
 }

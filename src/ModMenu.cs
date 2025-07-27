@@ -63,13 +63,71 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.RemoveHealFlashes ? 0 : 1),
             
             new HorizontalOption(
+                name: "Remove Soul Orb flashes",
+                description: "Remove the flash effect of the soul orb on the HUD",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveSoulOrbFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveSoulOrbFlashes ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Remove Lifeblood flashes",
+                description: "Remove the flash effect when collecting lifeblood",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveLifebloodCollectionFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveLifebloodCollectionFlashes ? 0 : 1),
+            
+            new HorizontalOption(
                 name: "Remove misc. knight flashes",
                 description: "Toggle for miscellaneous flash effects caught by a generic filter",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveGenericHeroFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemoveGenericHeroFlashes ? 0 : 1),
             
-            new TextPanel(name: "Boss-specific effects"),
+            new HorizontalOption(
+                name: "Tone down shade collection",
+                description: "targets knight flashes on shade collection",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveShadeGetFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveShadeGetFlashes ? 0 : 1),
+            
+            new TextPanel(name: "Enemy hit effects"),
+                        
+            new HorizontalOption(
+                name: "Remove SporeShroom flashes",
+                description: "Remove the effect on enemies hit by the spore cloud",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveSporeShroomFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveSporeShroomFlashes ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Remove Defender's Crest flashes",
+                description: "Remove the effect on enemies hit by the dung cloud",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveCrestFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveCrestFlashes ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Remove Infected hit flashes",
+                description: "Remove the flash effect on infected enemies",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveInfectedHitFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveInfectedHitFlashes ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Remove GrimmChild hit flashes",
+                description: "Remove the flash effect on enemies hit by GrimmChild",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveGrimmChildHitFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveGrimmChildHitFlashes ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Remove generic hit flashes",
+                description: "Remove the flash effect on most other enemies",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveGenericEnemyHitFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveGenericEnemyHitFlashes ? 0 : 1),
+            
+            new TextPanel(name: "Fight-specific effects"),
             
             new HorizontalOption(
                 name: "Tone down Soul Master/Tyrant",
@@ -120,6 +178,13 @@ public static class ModMenu
                 applySetting: index => { NoFlashingLights.Gs.ToneDownHornet2Fight = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.ToneDownHornet2Fight ? 0 : 1),
             
+            new HorizontalOption(
+                name: "Tone down GrimmKin fights",
+                description: "Mainly targets their teleportation flashes",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.ToneDownGrimmKinFights = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.ToneDownGrimmKinFights ? 0 : 1),
+            
             new TextPanel(name: "Miscellaneous effects"),
             
             new HorizontalOption(
@@ -144,11 +209,25 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.RemovePantheonCompletionFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove dream lever anims",
-                description: "Targets the flashes when hitting a dream lever in hall of gods",
+                name: "Remove Godhome Statues flashes",
+                description: "includes spawn, dream lever switch, completion",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { NoFlashingLights.Gs.ToneDownGodhomeDreamStatues = index == 0; },
-                loadSetting: () => NoFlashingLights.Gs.ToneDownGodhomeDreamStatues ? 0 : 1),
+                applySetting: index => { NoFlashingLights.Gs.ToneDownGodhomeStatues = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.ToneDownGodhomeStatues ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Tone down essence collection",
+                description: "when collecting them from whispering roots",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.ToneDownDreamOrbs = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.ToneDownDreamOrbs ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Tone down grimm lantern",
+                description: "removes most flashes when activating it",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.ToneDownGrimmLanternActivation = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.ToneDownGrimmLanternActivation ? 0 : 1),
             
             new HorizontalOption(
                 name: "Remove miscellaneous effects",
