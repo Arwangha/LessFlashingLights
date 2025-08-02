@@ -43,17 +43,10 @@ public static class ModMenu
             
             new HorizontalOption(
                 name: "Remove CDash flashes",
-                description: "Toggle for the flash effects triggered when using CDash",
+                description: "Toggles CDash usage flashes. Partially affects Nail Arts",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveCrystalDashFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemoveCrystalDashFlashes ? 0 : 1),
-            
-            new HorizontalOption(
-                name: "Remove nail arts flashes",
-                description: "Toggle for the flash effects triggered when using nail arts",
-                values: new[] { "Yes", "No" },
-                applySetting: index => { NoFlashingLights.Gs.RemoveNailArtsFlashes = index == 0; },
-                loadSetting: () => NoFlashingLights.Gs.RemoveNailArtsFlashes ? 0 : 1),
             
             new HorizontalOption(
                 name: "Remove focus flash",
@@ -78,7 +71,7 @@ public static class ModMenu
             
             new HorizontalOption(
                 name: "Remove misc. knight flashes",
-                description: "Toggle for miscellaneous flash effects caught by a generic filter",
+                description: "Toggles miscellaneous effects with a generic filter. Includes nail arts",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveGenericHeroFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemoveGenericHeroFlashes ? 0 : 1),

@@ -42,7 +42,7 @@ public static class FlashHandler
         if(!NoFlashingLights.Gs.ToneDownGrimmKinFights) orig(self);
     }
 
-    public static void OnFlashHeal(On.SpriteFlash.orig_flashFocusHeal orig, SpriteFlash self)//when healing & hitting grimm/nkg/warrior dreams/radiance
+    public static void OnFlashHeal(On.SpriteFlash.orig_flashFocusHeal orig, SpriteFlash self)//when healing & hitting grimm/nkg/warrior dreams/radiance/lots of uninfected foes
     {
         if(!NoFlashingLights.Gs.RemoveGenericEnemyHitFlashes) orig(self);
     }

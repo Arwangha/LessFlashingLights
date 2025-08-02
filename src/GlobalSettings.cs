@@ -25,7 +25,6 @@ public class GlobalSettings
     public bool ToneDownHornet2Fight = true;
     public bool ToneDownUumuuFight = true;
     public bool RemoveCrystalDashFlashes = true;
-    public bool RemoveNailArtsFlashes = true;
     public bool RemoveHealFlashes = true;
     public bool RemoveSoulOrbFlashes = true;
     public bool RemoveSporeShroomFlashes = true;

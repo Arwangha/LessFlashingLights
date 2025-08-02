@@ -11,8 +11,8 @@ namespace NoFlashingLights
 {
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
-        public new string GetName() => "No Flashing Lights";
-        public override string GetVersion() => "0.11.0";
+        public new string GetName() => "Less Flashing Lights";
+        public override string GetVersion() => "0.11.6";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -269,10 +269,8 @@ namespace NoFlashingLights
                     false;
             }
 
-            else if (self.name == "Silhouette")
+            else if (self.name == "Silhouette" && Gs.ToneDownMageLordFight)//part of soul master
             {
-                //TODO identify
-                Log("Silhouette");
                 self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
             }
 
@@ -384,11 +382,13 @@ namespace NoFlashingLights
                 }
             }
 
-            else if (enemy.name == "Mage Lord" && Gs.ToneDownRadianceFightsFlashes)
+            else if (enemy.name == "Mage Lord" && Gs.ToneDownMageLordFight)
             {
                 enemy.Child("Appear Flash").GetComponent<MeshRenderer>().enabled = false;
                 enemy.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
                 enemy.Child("Fire Effect").GetComponent<MeshRenderer>().enabled = false;
+                enemy.Child("Quake Pillar").GetComponent<MeshRenderer>().enabled = false;
+                enemy.Child("Quake Blast").GetComponent<MeshRenderer>().enabled = false;
             }
             
             else if (enemy.name == "Dream Mage Lord" && Gs.ToneDownMageLordFight)
@@ -396,14 +396,20 @@ namespace NoFlashingLights
                 GameObject appearFlash = enemy.Child("Appear Flash");
                 GameObject whiteFlash = enemy.Child("White Flash");
                 GameObject fireEffect = enemy.Child("Fire Effect");
+                GameObject quakePillar = enemy.Child("Quake Pillar");
+                GameObject quakeBlast = enemy.Child("Quake Blast");
                 
                 appearFlash.GetComponent<MeshRenderer>().enabled = false;//for some reason there's additional fsms compared to SM
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;
+                quakePillar.GetComponent<MeshRenderer>().enabled = false;
+                quakeBlast.GetComponent<MeshRenderer>().enabled = false;
                 
                 appearFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 fireEffect.GetComponent<PlayMakerFSM>().enabled = false;
+                quakePillar.GetComponent<PlayMakerFSM>().enabled = false;
+                quakeBlast.GetComponent<PlayMakerFSM>().enabled = false;
             }
 
             else if (enemy.name.Contains("Mega Jellyfish") && Gs.ToneDownUumuuFight)
@@ -456,7 +462,23 @@ namespace NoFlashingLights
                 GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;
             }
-
+            
+            else if (enemy.name.Contains("Mage") && !enemy.name.Contains("Blob") && !enemy.name.Contains("Balloon") && Gs.ToneDownMageLordFight) //Soul twisters but not follies nor mistakes and hopefully nothing else that I forgot about
+            {
+                Log(enemy.name);
+                GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
+                fireEffect.GetComponent<MeshRenderer>().enabled = false;
+                
+                GameObject flashSprite = enemy.gameObject.Child("Flash Sprite");
+                flashSprite.GetComponent<MeshRenderer>().enabled = false;
+                
+                GameObject appearFlash = enemy.gameObject.Child("Appear Flash");
+                appearFlash.GetComponent<MeshRenderer>().enabled = false;
+                
+                GameObject whiteFlash = enemy.gameObject.Child("White Flash");
+                whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            
             return isalreadydead;
         }
 
@@ -509,7 +531,11 @@ namespace NoFlashingLights
                 }
                 else if (Gs.RemoveGenericHeroFlashes)
                 {
-                    knightFlash.GetComponent<SpriteRenderer>().enabled = false;
+                    //knightFlash.GetComponent<SpriteRenderer>().enabled = false;
+                    knightFlash.TryGetComponent(out SpriteRenderer sRenderer);
+                    knightFlash.TryGetComponent(out MeshRenderer mRenderer);
+                    if (mRenderer) mRenderer.enabled = false;
+                    if (sRenderer) sRenderer.enabled = false;
                     bool hasFSM = knightFlash.TryGetComponent<PlayMakerFSM>(out var flashFSM);
                     if(hasFSM) flashFSM.enabled = false;
                 }
@@ -533,11 +559,19 @@ namespace NoFlashingLights
                 }
             }
 
+            if (Gs.RemoveDamageFlickering)
+            {
+                knight.GetComponent<SpriteFlash>().enabled = false;
+            }
+
             if(Gs.RemoveCrystalDashFlashes)
             {
                 GameObject SDBurst = _dontDestroyOnLoadScene.FindGameObject("Knight/Effects/SD Burst");
                 SDBurst.GetComponent<MeshRenderer>().enabled = false;
                 SDBurst.GetComponent<PlayMakerFSM>().enabled = false;
+
+                GameObject SDBling = effects.Child("SD Bling");
+                SDBling.GetComponent<MeshRenderer>().enabled = false;
             }
             
             if(Gs.RemoveSoulOrbFlashes)
