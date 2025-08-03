@@ -9,6 +9,7 @@ using Object = UnityEngine.Object;
 
 namespace NoFlashingLights
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
@@ -538,6 +539,7 @@ namespace NoFlashingLights
                     knightFlash.TryGetComponent(out MeshRenderer mRenderer);
                     if (mRenderer) mRenderer.enabled = false;
                     if (sRenderer) sRenderer.enabled = false;
+                    // ReSharper disable once InconsistentNaming
                     bool hasFSM = knightFlash.TryGetComponent<PlayMakerFSM>(out var flashFSM);
                     if(hasFSM) flashFSM.enabled = false;
                 }
@@ -568,10 +570,12 @@ namespace NoFlashingLights
 
             if(Gs.RemoveCrystalDashFlashes)
             {
+                // ReSharper disable once InconsistentNaming
                 GameObject SDBurst = _dontDestroyOnLoadScene.FindGameObject("Knight/Effects/SD Burst");
                 SDBurst.GetComponent<MeshRenderer>().enabled = false;
                 SDBurst.GetComponent<PlayMakerFSM>().enabled = false;
 
+                // ReSharper disable once InconsistentNaming
                 GameObject SDBling = effects.Child("SD Bling");
                 SDBling.GetComponent<MeshRenderer>().enabled = false;
             }
