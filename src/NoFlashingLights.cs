@@ -12,7 +12,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "0.11.6";
+        public override string GetVersion() => "1.0.0";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -84,19 +84,20 @@ namespace NoFlashingLights
             On.SpriteFlash.flashWhitePulse -= FlashHandler.OnFlashWhitePulse;
         }
         
-        
+        //Targets the completion effect when returning to hall of gods
         private void OnBossTrophyTierCompleteEffect(On.BossStatueTrophyPlaque.orig_DoTierCompleteEffect orig, BossStatueTrophyPlaque self, BossStatueTrophyPlaque.DisplayType type)
         {
             if(!Gs.ToneDownGodhomeStatues) orig(self, type);
         }
 
+        //Spawn anim
         private IEnumerator OnBossStatueFlashRoutine(On.BossStatueFlashEffect.orig_FlashRoutine orig, BossStatueFlashEffect self)
         {
             if(Gs.ToneDownGodhomeStatues) self.transform.Translate(new Vector3(2000f, 0f, 0f));//yeet the animation offscreen
             yield return orig(self);
         }
         
-        
+        //Dream toggle
         private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
         {
             if (Gs.ToneDownGodhomeStatues) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
@@ -121,6 +122,7 @@ namespace NoFlashingLights
             orig(self);
         }
 
+        //flickering when taking damage
         private void OnInvulnerablePulse(On.InvulnerablePulse.orig_startInvulnerablePulse orig, InvulnerablePulse self)
         {
             if (Gs.RemoveDamageFlickering) self.pulseDuration = 999;//effectively removes the pulse
@@ -138,7 +140,7 @@ namespace NoFlashingLights
                 if (sRenderer) sRenderer.enabled = false;
             }
 
-            if (arg.name.Contains("Gas Explosion Recycle"))
+            if (arg.name.Contains("Gas Explosion Recycle"))//jelly/egg explosion
             {
                 if (!Gs.ToneDownJellyfishExplosions) return arg;
                 arg.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
@@ -399,13 +401,13 @@ namespace NoFlashingLights
                 GameObject quakePillar = enemy.Child("Quake Pillar");
                 GameObject quakeBlast = enemy.Child("Quake Blast");
                 
-                appearFlash.GetComponent<MeshRenderer>().enabled = false;//for some reason there's additional fsms compared to SM
+                appearFlash.GetComponent<MeshRenderer>().enabled = false;
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;
                 quakePillar.GetComponent<MeshRenderer>().enabled = false;
                 quakeBlast.GetComponent<MeshRenderer>().enabled = false;
                 
-                appearFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                appearFlash.GetComponent<PlayMakerFSM>().enabled = false;//for some reason there's additional fsms compared to SM
                 whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 fireEffect.GetComponent<PlayMakerFSM>().enabled = false;
                 quakePillar.GetComponent<PlayMakerFSM>().enabled = false;
@@ -457,7 +459,7 @@ namespace NoFlashingLights
                 Log("removing grimmkin warp flash");
             }
             
-            else if (enemy.name.Contains("Mage Knight") && Gs.ToneDownMageLordFight)//soul warrior but eh
+            else if (enemy.name.Contains("Mage Knight") && Gs.ToneDownMageLordFight)//soul warrior
             {
                 GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;

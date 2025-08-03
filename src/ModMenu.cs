@@ -57,7 +57,7 @@ public static class ModMenu
             
             new HorizontalOption(
                 name: "Remove Soul Orb flashes",
-                description: "Remove the flash effect of the soul orb on the HUD",
+                description: "Remove the flash effects of the soul orb on the HUD",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveSoulOrbFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemoveSoulOrbFlashes ? 0 : 1),
@@ -68,6 +68,13 @@ public static class ModMenu
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveLifebloodCollectionFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemoveLifebloodCollectionFlashes ? 0 : 1),
+                        
+            new HorizontalOption(
+                name: "Tone down shade collection",
+                description: "targets knight flashes on shade collection",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveShadeGetFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveShadeGetFlashes ? 0 : 1),
             
             new HorizontalOption(
                 name: "Remove misc. knight flashes",
@@ -75,13 +82,6 @@ public static class ModMenu
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveGenericHeroFlashes = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.RemoveGenericHeroFlashes ? 0 : 1),
-            
-            new HorizontalOption(
-                name: "Tone down shade collection",
-                description: "targets knight flashes on shade collection",
-                values: new[] { "Yes", "No" },
-                applySetting: index => { NoFlashingLights.Gs.RemoveShadeGetFlashes = index == 0; },
-                loadSetting: () => NoFlashingLights.Gs.RemoveShadeGetFlashes ? 0 : 1),
             
             new TextPanel(name: "Enemy hit effects"),
                         
@@ -114,7 +114,7 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.RemoveGrimmChildHitFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove generic hit flashes",
+                name: "Remove white hit flashes",
                 description: "Remove the flash effect on most other enemies",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.RemoveGenericEnemyHitFlashes = index == 0; },
@@ -124,7 +124,7 @@ public static class ModMenu
             
             new HorizontalOption(
                 name: "Tone down Soul Master/Tyrant",
-                description: "notably teleportation, spells and fake death. Includes Soul Tyrant",
+                description: "notably teleportation, spells and fake death. Includes s. twister",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { NoFlashingLights.Gs.ToneDownMageLordFight = index == 0; },
                 loadSetting: () => NoFlashingLights.Gs.ToneDownMageLordFight ? 0 : 1),
