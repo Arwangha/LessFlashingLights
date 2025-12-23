@@ -13,7 +13,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.0.5";
+        public override string GetVersion() => "1.0.0.7";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -368,7 +368,7 @@ namespace NoFlashingLights
                 GameManager.instance.StartCoroutine(RemoveGrimmLanternFlashes());
             }
             
-            else if (newScene.name == "Fungus3_archives_02" && Gs.RemoveQuirrelArchivesCutsceneFlashes)
+            else if (newScene.name == "Fungus3_archive_02" && Gs.RemoveQuirrelArchivesCutsceneFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveQuirrelArchivesCutsceneFlashes());
             }
