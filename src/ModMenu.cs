@@ -223,6 +223,13 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.ToneDownGrimmLanternActivation ? 0 : 1),
             
             new HorizontalOption(
+                name: "Remove Quirrel Cutscene flashes",
+                description: "For flashes occurring while revealing Monomon",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { NoFlashingLights.Gs.RemoveQuirrelArchivesCutsceneFlashes = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.RemoveQuirrelArchivesCutsceneFlashes ? 0 : 1),
+            
+            new HorizontalOption(
                 name: "Remove miscellaneous effects",
                 description: "Targets other flashes caught by a generic filter",
                 values: new[] { "Yes", "No" },

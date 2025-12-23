@@ -31,4 +31,5 @@ public class GlobalSettings
     public bool RemoveCrestFlashes = true;
     public bool RemoveShadeGetFlashes = true;
     public bool RemoveGenericHeroFlashes = true;
+    public bool RemoveQuirrelArchivesCutsceneFlashes = true;
 }

@@ -13,7 +13,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.0";
+        public override string GetVersion() => "1.0.0.5";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -21,7 +21,7 @@ namespace NoFlashingLights
         
         private Scene _dontDestroyOnLoadScene;
         private GameObject? _emptyGo;
-        private bool _ghostExploding;//I do not remember what was the logic behind this but I'm too scared to remove it
+        private bool _ghostExploding;//I do not remember what was the logic behind this, but I'm too scared to remove it
 
         public override void Initialize()
         {
@@ -141,10 +141,17 @@ namespace NoFlashingLights
                 if (sRenderer) sRenderer.enabled = false;
             }
 
-            if (arg.name.Contains("Gas Explosion Recycle"))//jelly/egg explosion
+            if (arg.name.Contains("Gas Explosion"))//jelly/egg explosion
             {
                 if (!Gs.ToneDownJellyfishExplosions) return arg;
                 arg.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
+                arg.TryGetComponent(out PlayMakerFSM fsm);
+                if(fsm) fsm.enabled = false;
+            }
+            
+            else if (arg.name.Contains("Death Puff"))
+            {
+                Log(arg.name);
             }
 
             return arg;
@@ -268,8 +275,8 @@ namespace NoFlashingLights
             else if (self.name.Contains("Ghost Warrior") && Gs.ToneDownWarriorDreamsFlashes)
             {
                 self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
-                _dontDestroyOnLoadScene.FindGameObject("Dream Impact(Clone)").GetComponent<MeshRenderer>().enabled =
-                    false;
+                /*_dontDestroyOnLoadScene.FindGameObject("Dream Impact(Clone)").GetComponent<MeshRenderer>().enabled =
+                    false;*/
             }
 
             else if (self.name == "Silhouette" && Gs.ToneDownMageLordFight)//part of soul master
@@ -360,6 +367,11 @@ namespace NoFlashingLights
             {
                 GameManager.instance.StartCoroutine(RemoveGrimmLanternFlashes());
             }
+            
+            else if (newScene.name == "Fungus3_archives_02" && Gs.RemoveQuirrelArchivesCutsceneFlashes)
+            {
+                GameManager.instance.StartCoroutine(RemoveQuirrelArchivesCutsceneFlashes());
+            }
         }
 
         private bool OnEnableEnemy(GameObject enemy, bool isalreadydead)
@@ -408,7 +420,7 @@ namespace NoFlashingLights
                 quakePillar.GetComponent<MeshRenderer>().enabled = false;
                 quakeBlast.GetComponent<MeshRenderer>().enabled = false;
                 
-                appearFlash.GetComponent<PlayMakerFSM>().enabled = false;//for some reason there's additional fsms compared to SM
+                appearFlash.GetComponent<PlayMakerFSM>().enabled = false;//for some reason, there's additional fsms compared to SM
                 whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 fireEffect.GetComponent<PlayMakerFSM>().enabled = false;
                 quakePillar.GetComponent<PlayMakerFSM>().enabled = false;
@@ -457,7 +469,7 @@ namespace NoFlashingLights
                 GameObject redFlash = enemy.gameObject.Child("Red Flash 1");
                 redFlash.GetComponent<SimpleSpriteFade>().enabled = false;
                 redFlash.GetComponent<SpriteRenderer>().enabled = false;
-                Log("removing grimmkin warp flash");
+                //Log("removing grimmkin warp flash");
             }
             
             else if (enemy.name.Contains("Mage Knight") && Gs.ToneDownMageLordFight)//soul warrior
@@ -539,8 +551,9 @@ namespace NoFlashingLights
                     knightFlash.TryGetComponent(out MeshRenderer mRenderer);
                     if (mRenderer) mRenderer.enabled = false;
                     if (sRenderer) sRenderer.enabled = false;
-                    // ReSharper disable once InconsistentNaming
+                    // ReSharper disable InconsistentNaming
                     bool hasFSM = knightFlash.TryGetComponent<PlayMakerFSM>(out var flashFSM);
+                    // ReSharper restore InconsistentNaming
                     if(hasFSM) flashFSM.enabled = false;
                 }
             }
@@ -726,6 +739,30 @@ namespace NoFlashingLights
                 impact.GetComponent<PlayMakerFSM>().enabled = false;
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
                 whiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
+            }
+        }
+
+        private IEnumerator RemoveQuirrelArchivesCutsceneFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject quirrelFlash = GameObject.Find("/Dreamer Monomon/Quirrel/White Flash");
+            GameObject arriveFlash0 = GameObject.Find("/Dreamer Monomon/Arrive Flash/White Flash");
+            GameObject arriveFlash1 = GameObject.Find("/Dreamer Monomon/Arrive Flash/White Flash (1)");
+
+            if (quirrelFlash)
+            {
+                quirrelFlash.GetComponent<SpriteRenderer>().enabled = false;
+            }
+
+            if (arriveFlash0)
+            {
+                arriveFlash0.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            
+            if (arriveFlash1)
+            {
+                arriveFlash1.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
 
