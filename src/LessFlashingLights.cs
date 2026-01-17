@@ -7,13 +7,13 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace NoFlashingLights
+namespace LessFlashingLights
 {
     // ReSharper disable once ClassNeverInstantiated.Global
-    public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
+    public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.0.9";
+        public override string GetVersion() => "1.0.0.12";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -148,12 +148,13 @@ namespace NoFlashingLights
                 arg.TryGetComponent(out PlayMakerFSM fsm);
                 //if(fsm) fsm.enabled = false;
             }
-            
-            //else if (arg.name.Contains("Death Puff"))
-            //{
-            //    Log(arg.name);
-            //}
 
+            if (arg.name == "Grimm_flare_pillar(Clone)")
+            {
+                arg.Child("Pillar").Child("haze2").GetComponent<SpriteRenderer>().enabled = false;
+            }
+            
+            //Log(arg.name);
             return arg;
         }
 
@@ -291,6 +292,14 @@ namespace NoFlashingLights
                 {
                     sRenderer.enabled = false;
                 }
+            }
+            
+            else if (self.name == "Spawn Flash")
+            {
+                //Log("spawn flash fsm enabled");
+                //Log(self.gameObject.name);
+                self.enabled = false;
+                self.gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
         }
 
@@ -466,7 +475,7 @@ namespace NoFlashingLights
             
             else if (enemy.name.Contains("Flamebearer") && Gs.ToneDownGrimmKinFights)//grimmkin 
             {
-                GameObject redFlash = enemy.gameObject.Child("Red Flash 1");
+                GameObject redFlash = enemy.Child("Red Flash 1");
                 redFlash.GetComponent<SimpleSpriteFade>().enabled = false;
                 redFlash.GetComponent<SpriteRenderer>().enabled = false;
                 //Log("removing grimmkin warp flash");
@@ -474,31 +483,81 @@ namespace NoFlashingLights
             
             else if (enemy.name.Contains("Mage Knight") && Gs.ToneDownMageLordFight)//soul warrior
             {
-                GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
+                GameObject fireEffect = enemy.Child("Fire Effect");
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;
             }
             
             else if (enemy.name.Contains("Mage") && !enemy.name.Contains("Blob") && !enemy.name.Contains("Balloon") && Gs.ToneDownMageLordFight) //Soul twisters but not follies nor mistakes and hopefully nothing else that I forgot about
             {
                 //Log(enemy.name);
-                GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
+                GameObject fireEffect = enemy.Child("Fire Effect");
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;
                 
-                GameObject flashSprite = enemy.gameObject.Child("Flash Sprite");
+                GameObject flashSprite = enemy.Child("Flash Sprite");
                 flashSprite.GetComponent<MeshRenderer>().enabled = false;
                 
-                GameObject appearFlash = enemy.gameObject.Child("Appear Flash");
+                GameObject appearFlash = enemy.Child("Appear Flash");
                 appearFlash.GetComponent<MeshRenderer>().enabled = false;
                 
-                GameObject whiteFlash = enemy.gameObject.Child("White Flash");
+                GameObject whiteFlash = enemy.Child("White Flash");
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
             }
             
             else if (enemy.name.Contains("Ceiling Dropper"))
             {
-                GameObject explosion = enemy.gameObject.Child("Gas Explosion M2(Clone)");
+                GameObject explosion = enemy.Child("Gas Explosion M2(Clone)");
                 if(explosion) explosion.Child("orange flash").SetActive(false);
                 //Log("Ceiling dropper flash removed");
+            }
+            
+            else if (enemy.name.Contains("Grimm Boss"))
+            {
+                GameObject redFlash1 = enemy.Child("Red Flash 1");
+                GameObject redFlash2 = enemy.Child("Red Flash 2");
+                
+                redFlash1.GetComponent<SpriteRenderer>().enabled = false;
+                redFlash2.GetComponent<SpriteRenderer>().enabled = false;
+                
+                GameObject explodeEffects = enemy.Child("Explode Effects");
+                GameObject whiteFlash = explodeEffects.Child("White Flash");
+                GameObject burst1 = explodeEffects.Child("Burst (1)");
+                
+                whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+                burst1.GetComponent<MeshRenderer>().enabled = false;
+                
+                GameObject grimmControl = GameObject.Find("Grimm Control");
+                if (grimmControl)
+                {
+                    GameObject finalIntroFlash = grimmControl.Child("Final Intro Flash");
+                    if(finalIntroFlash) finalIntroFlash.GetComponent<MeshRenderer>().enabled = false;
+                    
+                    GameObject greatEyeOpen2 = GameObject.Find("/Grimm Control/Appear Scene/Great Eye Open 2");
+                    if (greatEyeOpen2)
+                    {
+                        GameObject sdSharpFlash = greatEyeOpen2.Child("SD Sharp Flash (1)");
+                        GameObject eyeWhiteFlash = greatEyeOpen2.Child("White Flash");
+                        
+                        if(sdSharpFlash) sdSharpFlash.GetComponent<MeshRenderer>().enabled = false;
+                        if(eyeWhiteFlash) eyeWhiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+                    }
+                }
+                
+                GameObject teleInEffects = GameObject.Find("Tele In Effects");
+                if (teleInEffects)
+                {
+                    teleInEffects.Child("Flame Pillar").GetComponent<MeshRenderer>().enabled = false;
+                }
+                
+                GameObject grimmNightmareFabricLantern = GameObject.Find("Grimm_nightmare_fabric_lantern");
+                if (grimmNightmareFabricLantern)
+                {
+                    grimmNightmareFabricLantern.Child("grimm_fader").GetComponent<SpriteRenderer>().enabled = false;
+                }
+            }
+            
+            else if (enemy.name.Contains("Real Bat"))
+            {
+                enemy.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
             }
             
             return isalreadydead;
@@ -782,7 +841,6 @@ namespace NoFlashingLights
             {
                 sycophantHitFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 sycophantHitFlash.GetComponent<SpriteRenderer>().enabled = false;
-                //Log("removing lantern flashes 1");
             }
             
             GameObject grimmBrazier = GameObject.Find("/Nightmare Lantern/lantern_dream/big_lantern/grimm_brazier");
@@ -795,14 +853,12 @@ namespace NoFlashingLights
                 {
                     lightFlash.GetComponent<SpriteRenderer>().enabled = false;
                     lightFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                    //Log("removing lantern flashes 2");
                 }
 
                 if (sharpFlash)
                 {
                     sharpFlash.GetComponent<MeshRenderer>().enabled = false;
                     sharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                    //Log("removing lantern flashes 3");
                 }
             }
         }

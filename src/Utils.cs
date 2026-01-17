@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace NoFlashingLights;
+namespace LessFlashingLights;
 
 public static class Utils
 {

@@ -1,4 +1,4 @@
-namespace NoFlashingLights;
+namespace LessFlashingLights;
 
 public class GlobalSettings
 {
