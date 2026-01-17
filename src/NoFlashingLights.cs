@@ -13,7 +13,7 @@ namespace NoFlashingLights
     public class NoFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.0.7";
+        public override string GetVersion() => "1.0.0.9";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -146,13 +146,13 @@ namespace NoFlashingLights
                 if (!Gs.ToneDownJellyfishExplosions) return arg;
                 arg.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
                 arg.TryGetComponent(out PlayMakerFSM fsm);
-                if(fsm) fsm.enabled = false;
+                //if(fsm) fsm.enabled = false;
             }
             
-            else if (arg.name.Contains("Death Puff"))
-            {
-                Log(arg.name);
-            }
+            //else if (arg.name.Contains("Death Puff"))
+            //{
+            //    Log(arg.name);
+            //}
 
             return arg;
         }
@@ -215,7 +215,7 @@ namespace NoFlashingLights
 
             else if (self.name == "white_solid" && Gs.ToneDownRadianceFightsFlashes)
             {
-                Log("white_solid");
+                //Log("white_solid");
                 self.gameObject.RemoveComponent<SpriteRenderer>();
                 GameObject bossControl = GameObject.Find("Boss Control");
                 bossControl.Child("Light Solid").RemoveComponent<SpriteRenderer>();
@@ -480,7 +480,7 @@ namespace NoFlashingLights
             
             else if (enemy.name.Contains("Mage") && !enemy.name.Contains("Blob") && !enemy.name.Contains("Balloon") && Gs.ToneDownMageLordFight) //Soul twisters but not follies nor mistakes and hopefully nothing else that I forgot about
             {
-                Log(enemy.name);
+                //Log(enemy.name);
                 GameObject fireEffect = enemy.gameObject.Child("Fire Effect");
                 fireEffect.GetComponent<MeshRenderer>().enabled = false;
                 
@@ -492,6 +492,13 @@ namespace NoFlashingLights
                 
                 GameObject whiteFlash = enemy.gameObject.Child("White Flash");
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+            }
+            
+            else if (enemy.name.Contains("Ceiling Dropper"))
+            {
+                GameObject explosion = enemy.gameObject.Child("Gas Explosion M2(Clone)");
+                if(explosion) explosion.Child("orange flash").SetActive(false);
+                //Log("Ceiling dropper flash removed");
             }
             
             return isalreadydead;
@@ -775,7 +782,7 @@ namespace NoFlashingLights
             {
                 sycophantHitFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 sycophantHitFlash.GetComponent<SpriteRenderer>().enabled = false;
-                Log("removing lantern flashes 1");
+                //Log("removing lantern flashes 1");
             }
             
             GameObject grimmBrazier = GameObject.Find("/Nightmare Lantern/lantern_dream/big_lantern/grimm_brazier");
@@ -788,14 +795,14 @@ namespace NoFlashingLights
                 {
                     lightFlash.GetComponent<SpriteRenderer>().enabled = false;
                     lightFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                    Log("removing lantern flashes 2");
+                    //Log("removing lantern flashes 2");
                 }
 
                 if (sharpFlash)
                 {
                     sharpFlash.GetComponent<MeshRenderer>().enabled = false;
                     sharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                    Log("removing lantern flashes 3");
+                    //Log("removing lantern flashes 3");
                 }
             }
         }
