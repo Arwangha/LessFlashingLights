@@ -188,11 +188,11 @@ public static class ModMenu
                 loadSetting: () => NoFlashingLights.Gs.ToneDownBirthPlaceFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down jellyfish explosions",
-                description: "Includes explosive bubbles",
+                name: "Tone down explosions",
+                description: "Includes bubbles, belflies, spores",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { NoFlashingLights.Gs.ToneDownJellyfishExplosions = index == 0; },
-                loadSetting: () => NoFlashingLights.Gs.ToneDownJellyfishExplosions ? 0 : 1),
+                applySetting: index => { NoFlashingLights.Gs.ToneDownExplosions = index == 0; },
+                loadSetting: () => NoFlashingLights.Gs.ToneDownExplosions ? 0 : 1),
             
             new HorizontalOption(
                 name: "Tone down pantheon victories",

@@ -12,7 +12,7 @@ public class GlobalSettings
     public bool ToneDownGrimmKinFights = true;
     public bool ToneDownGrimmLanternActivation = true;
     public bool RemoveGenericFlashingEffects = true;
-    public bool ToneDownJellyfishExplosions = true;
+    public bool ToneDownExplosions = true;
     public bool ToneDownMageLordFight = true;
     public bool RemoveSpellFlashes = true;
     public bool RemoveBossScreams = true;

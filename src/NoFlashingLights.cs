@@ -143,7 +143,7 @@ namespace NoFlashingLights
 
             if (arg.name.Contains("Gas Explosion"))//jelly/egg explosion
             {
-                if (!Gs.ToneDownJellyfishExplosions) return arg;
+                if (!Gs.ToneDownExplosions) return arg;
                 arg.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
                 arg.TryGetComponent(out PlayMakerFSM fsm);
                 //if(fsm) fsm.enabled = false;
