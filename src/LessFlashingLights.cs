@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.0.15";
+        public override string GetVersion() => "1.0.0.16";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -653,6 +653,9 @@ namespace LessFlashingLights
             if (Gs.RemoveDamageFlickering)
             {
                 knight.GetComponent<SpriteFlash>().enabled = false;
+
+                GameObject hitCrack = GameObject.Find("Knight/Effects/Damage Effect/Hit Crack");
+                hitCrack.GetComponent<SpriteRenderer>().enabled = false;
             }
 
             if(Gs.RemoveCrystalDashFlashes)
@@ -669,10 +672,14 @@ namespace LessFlashingLights
             
             if(Gs.RemoveSoulOrbFlashes)
             {
-                GameObject soulOrb =
+                GameObject soulOrbWhiteFlash =
                     _dontDestroyOnLoadScene.FindGameObject("_GameCameras/HudCamera/Hud Canvas/Soul Orb/White Flash");
-                soulOrb.GetComponent<SpriteRenderer>().enabled = false;
-                soulOrb.GetComponent<PlayMakerFSM>().enabled = false;
+                GameObject soulOrbBurstAnim =
+                    _dontDestroyOnLoadScene.FindGameObject("_GameCameras/HudCamera/Hud Canvas/Soul Orb/Burst Anim");
+                
+                soulOrbWhiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+                soulOrbWhiteFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                soulOrbBurstAnim.GetComponent<MeshRenderer>().enabled = false;
             }
         }
 
