@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.0.14";
+        public override string GetVersion() => "1.0.0.15";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -22,6 +22,7 @@ namespace LessFlashingLights
         private Scene _dontDestroyOnLoadScene;
         private GameObject? _emptyGo;
         private bool _ghostExploding;//I do not remember what was the logic behind this, but I'm too scared to remove it
+        private bool _inGrimmFight;//For disabling an FSM used in other places which breaks stuff when disabled outside the fight
 
         public override void Initialize()
         {
@@ -295,10 +296,10 @@ namespace LessFlashingLights
             }
             
             //NKG bats. Also used in plenty of other places but breaks stuff outside the fights hence the verification
-            else if (self.name == "Spawn Flash" && Gs.ToneDownGrimmKinFights)
+            else if (self.name == "Spawn Flash" && Gs.ToneDownGrimmKinFights && _inGrimmFight)
             {
-                //self.enabled = false;
-                //self.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                self.enabled = false;
+                self.gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
             
             //crossroads explosions
@@ -311,6 +312,7 @@ namespace LessFlashingLights
         private void OnSceneChange(Scene oldScene, Scene newScene)
         {
             if (_ghostExploding) _ghostExploding = false;
+            if(_inGrimmFight)  _inGrimmFight = false;//we've exited the fight. set to true when grimm/nkg gets enabled
             
             if (newScene.name == "Crossroads_ShamanTemple" && Gs.RemoveSpellPickupsFlashes)
             {
@@ -517,6 +519,7 @@ namespace LessFlashingLights
             
             else if (enemy.name.Contains("Grimm Boss") && Gs.ToneDownGrimmKinFights)
             {
+                _inGrimmFight = true;
                 GameObject redFlash1 = enemy.Child("Red Flash 1");
                 GameObject redFlash2 = enemy.Child("Red Flash 2");
                 
