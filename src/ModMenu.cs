@@ -172,8 +172,8 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownHornet2Fight ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down GrimmKin fights",
-                description: "Mainly targets their teleportation flashes",
+                name: "Tone down Grimm fights",
+                description: "Includes both grimm fights and the grimmkins",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.ToneDownGrimmKinFights = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.ToneDownGrimmKinFights ? 0 : 1),

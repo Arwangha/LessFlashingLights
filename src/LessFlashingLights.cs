@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.0.12";
+        public override string GetVersion() => "1.0.0.14";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -149,7 +149,7 @@ namespace LessFlashingLights
                 //if(fsm) fsm.enabled = false;
             }
 
-            if (arg.name == "Grimm_flare_pillar(Clone)")
+            if (arg.name == "Grimm_flare_pillar(Clone)" && Gs.ToneDownGrimmKinFights)
             {
                 arg.Child("Pillar").Child("haze2").GetComponent<SpriteRenderer>().enabled = false;
             }
@@ -294,10 +294,9 @@ namespace LessFlashingLights
                 }
             }
             
-            else if (self.name == "Spawn Flash")
+            //note: given the name I put it under generic flashes, however this effect was noticed on the NKG fight
+            else if (self.name == "Spawn Flash" && Gs.RemoveGenericFlashingEffects || Gs.ToneDownGrimmKinFights)
             {
-                //Log("spawn flash fsm enabled");
-                //Log(self.gameObject.name);
                 self.enabled = false;
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
@@ -510,7 +509,7 @@ namespace LessFlashingLights
                 //Log("Ceiling dropper flash removed");
             }
             
-            else if (enemy.name.Contains("Grimm Boss"))
+            else if (enemy.name.Contains("Grimm Boss") && Gs.ToneDownGrimmKinFights)
             {
                 GameObject redFlash1 = enemy.Child("Red Flash 1");
                 GameObject redFlash2 = enemy.Child("Red Flash 2");
