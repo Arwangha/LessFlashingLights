@@ -294,11 +294,17 @@ namespace LessFlashingLights
                 }
             }
             
-            //note: given the name I put it under generic flashes, however this effect was noticed on the NKG fight
-            else if (self.name == "Spawn Flash" && Gs.RemoveGenericFlashingEffects || Gs.ToneDownGrimmKinFights)
+            //NKG bats. Also used in plenty of other places but breaks stuff outside the fights hence the verification
+            else if (self.name == "Spawn Flash" && Gs.ToneDownGrimmKinFights)
             {
-                self.enabled = false;
-                self.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                //self.enabled = false;
+                //self.gameObject.GetComponent<MeshRenderer>().enabled = false;
+            }
+            
+            //crossroads explosions
+            if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
+            {
+                self.gameObject.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
             }
         }
 
