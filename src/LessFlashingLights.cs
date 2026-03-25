@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.1.0";
+        public override string GetVersion() => "1.0.1.3";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -53,7 +53,42 @@ namespace LessFlashingLights
             On.SpriteFlash.flashShadeGet += FlashHandler.OnFlashShadeGet;
             On.SpriteFlash.flashSporeQuick += FlashHandler.OnFlashSpore;
             On.SpriteFlash.flashWhitePulse += FlashHandler.OnFlashWhitePulse;
+
+            On.BossDoorChallengeUI.Show += OnBossDoorChallengeUIShow;
+            On.BossDoorChallengeUIBindingButton.SetAllSelected += OnAllBindingsSelected;
         }
+
+        private void OnAllBindingsSelected(On.BossDoorChallengeUIBindingButton.orig_SetAllSelected orig, BossDoorChallengeUIBindingButton self, bool value)
+        {
+            orig(self, value);
+
+            if (!value || !Gs.RemoveGodhomeFlashes) return;
+            
+            self.gameObject.Child("AllFlashEffect").SetActive(false);
+        }
+
+        private void OnBossDoorChallengeUIShow(On.BossDoorChallengeUI.orig_Show orig, BossDoorChallengeUI self)
+        {
+            orig(self);
+
+            if (!Gs.RemoveGodhomeFlashes) return;
+
+            GameObject bossDoorSelectAllFlash = self.gameObject.Child("Panel").Child("Select All Flash");
+            if (!bossDoorSelectAllFlash) return;
+            
+            GameObject deathGlow = bossDoorSelectAllFlash.Child("Death Glow");
+                
+            deathGlow.RemoveComponent<MeshRenderer>();
+            deathGlow.RemoveComponent<tk2dSprite>();
+            deathGlow.RemoveComponent<tk2dSpriteAnimator>();
+            deathGlow.RemoveComponent<DeactivateAfter2dtkAnimation>();
+
+            GameObject whiteFlashR = bossDoorSelectAllFlash.Child("White Flash R");
+            
+            whiteFlashR.RemoveComponent<SimpleSpriteFade>();
+            whiteFlashR.RemoveComponent<SpriteRenderer>();
+        }
+
 
         public void Unload()
         {
@@ -89,20 +124,20 @@ namespace LessFlashingLights
         //Targets the completion effect when returning to hall of gods
         private void OnBossTrophyTierCompleteEffect(On.BossStatueTrophyPlaque.orig_DoTierCompleteEffect orig, BossStatueTrophyPlaque self, BossStatueTrophyPlaque.DisplayType type)
         {
-            if(!Gs.ToneDownGodhomeStatues) orig(self, type);
+            if(!Gs.RemoveGodhomeFlashes) orig(self, type);
         }
 
         //Spawn anim
         private IEnumerator OnBossStatueFlashRoutine(On.BossStatueFlashEffect.orig_FlashRoutine orig, BossStatueFlashEffect self)
         {
-            if(Gs.ToneDownGodhomeStatues) self.transform.Translate(new Vector3(2000f, 0f, 0f));//yeet the animation offscreen
+            if(Gs.RemoveGodhomeFlashes) self.transform.Translate(new Vector3(2000f, 0f, 0f));//yeet the animation offscreen
             yield return orig(self);
         }
         
         //Dream toggle
         private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
         {
-            if (Gs.ToneDownGodhomeStatues) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
+            if (Gs.RemoveGodhomeFlashes) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
             yield return orig(self, usingDreamVersion);
         }
         
@@ -146,7 +181,7 @@ namespace LessFlashingLights
             {
                 if (!Gs.ToneDownExplosions) return arg;
                 arg.Child("orange flash").GetComponent<SpriteRenderer>().enabled = false;
-                arg.TryGetComponent(out PlayMakerFSM fsm);
+                //arg.TryGetComponent(out PlayMakerFSM fsm);
                 //if(fsm) fsm.enabled = false;
             }
 
@@ -344,7 +379,7 @@ namespace LessFlashingLights
                 GameManager.instance.StartCoroutine(RemoveBirthPlaceTriggerFlashes());
             }
             
-            else if (newScene.name.Contains("GG_End_Sequence") && Gs.RemovePantheonCompletionFlashes)
+            else if (newScene.name.Contains("GG_End_Sequence") && Gs.RemoveGodhomeFlashes)
             {
                 SpriteRenderer[] orbFlashes =
                     GameObject.Find("Big Orb Flash").GetComponentsInChildren<SpriteRenderer>();

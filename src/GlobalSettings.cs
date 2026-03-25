@@ -2,7 +2,7 @@ namespace LessFlashingLights;
 
 public class GlobalSettings
 {
-    public bool ToneDownGodhomeStatues = true;
+    public bool RemoveGodhomeFlashes = true;
     public bool ToneDownDreamOrbs = true;
     public bool RemoveInfectedHitFlashes = true;
     public bool RemoveLifebloodCollectionFlashes = true;
@@ -20,7 +20,6 @@ public class GlobalSettings
     public bool ToneDownWarriorDreamsFlashes = true;
     public bool RemoveSpellPickupsFlashes = true;
     public bool ToneDownBirthPlaceFlashes = true;
-    public bool RemovePantheonCompletionFlashes = true;
     public bool ToneDownRadianceFightsFlashes = true;
     public bool ToneDownHornet2Fight = true;
     public bool ToneDownUumuuFight = true;

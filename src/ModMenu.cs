@@ -195,18 +195,11 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownExplosions ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down pantheon victories",
-                description: "Targets flashes on the completion & bindings cutscene",
+                name: "Remove Godhome-related flashes",
+                description: "includes statues and pantheons doors",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.RemovePantheonCompletionFlashes = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.RemovePantheonCompletionFlashes ? 0 : 1),
-            
-            new HorizontalOption(
-                name: "Remove Godhome Statues flashes",
-                description: "includes spawn, dream lever switch, completion",
-                values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.ToneDownGodhomeStatues = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.ToneDownGodhomeStatues ? 0 : 1),
+                applySetting: index => { LessFlashingLights.Gs.RemoveGodhomeFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveGodhomeFlashes ? 0 : 1),
             
             new HorizontalOption(
                 name: "Tone down essence collection",
