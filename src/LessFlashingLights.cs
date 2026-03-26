@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.1.3";
+        public override string GetVersion() => "1.0.1.4";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -58,37 +58,6 @@ namespace LessFlashingLights
             On.BossDoorChallengeUIBindingButton.SetAllSelected += OnAllBindingsSelected;
         }
 
-        private void OnAllBindingsSelected(On.BossDoorChallengeUIBindingButton.orig_SetAllSelected orig, BossDoorChallengeUIBindingButton self, bool value)
-        {
-            orig(self, value);
-
-            if (!value || !Gs.RemoveGodhomeFlashes) return;
-            
-            self.gameObject.Child("AllFlashEffect").SetActive(false);
-        }
-
-        private void OnBossDoorChallengeUIShow(On.BossDoorChallengeUI.orig_Show orig, BossDoorChallengeUI self)
-        {
-            orig(self);
-
-            if (!Gs.RemoveGodhomeFlashes) return;
-
-            GameObject bossDoorSelectAllFlash = self.gameObject.Child("Panel").Child("Select All Flash");
-            if (!bossDoorSelectAllFlash) return;
-            
-            GameObject deathGlow = bossDoorSelectAllFlash.Child("Death Glow");
-                
-            deathGlow.RemoveComponent<MeshRenderer>();
-            deathGlow.RemoveComponent<tk2dSprite>();
-            deathGlow.RemoveComponent<tk2dSpriteAnimator>();
-            deathGlow.RemoveComponent<DeactivateAfter2dtkAnimation>();
-
-            GameObject whiteFlashR = bossDoorSelectAllFlash.Child("White Flash R");
-            
-            whiteFlashR.RemoveComponent<SimpleSpriteFade>();
-            whiteFlashR.RemoveComponent<SpriteRenderer>();
-        }
-
 
         public void Unload()
         {
@@ -119,6 +88,40 @@ namespace LessFlashingLights
             On.SpriteFlash.flashShadeGet -= FlashHandler.OnFlashShadeGet;
             On.SpriteFlash.flashSporeQuick -= FlashHandler.OnFlashSpore;
             On.SpriteFlash.flashWhitePulse -= FlashHandler.OnFlashWhitePulse;
+            
+            On.BossDoorChallengeUI.Show += OnBossDoorChallengeUIShow;
+            On.BossDoorChallengeUIBindingButton.SetAllSelected += OnAllBindingsSelected;
+        }
+        
+        private void OnAllBindingsSelected(On.BossDoorChallengeUIBindingButton.orig_SetAllSelected orig, BossDoorChallengeUIBindingButton self, bool value)
+        {
+            orig(self, value);
+
+            if (!value || !Gs.RemoveGodhomeFlashes) return;
+            
+            self.gameObject.Child("AllFlashEffect").SetActive(false);
+        }
+
+        private void OnBossDoorChallengeUIShow(On.BossDoorChallengeUI.orig_Show orig, BossDoorChallengeUI self)
+        {
+            orig(self);
+
+            if (!Gs.RemoveGodhomeFlashes) return;
+
+            GameObject bossDoorSelectAllFlash = self.gameObject.Child("Panel").Child("Select All Flash");
+            if (!bossDoorSelectAllFlash) return;
+            
+            GameObject deathGlow = bossDoorSelectAllFlash.Child("Death Glow");
+                
+            deathGlow.RemoveComponent<MeshRenderer>();
+            deathGlow.RemoveComponent<tk2dSprite>();
+            deathGlow.RemoveComponent<tk2dSpriteAnimator>();
+            deathGlow.RemoveComponent<DeactivateAfter2dtkAnimation>();
+
+            GameObject whiteFlashR = bossDoorSelectAllFlash.Child("White Flash R");
+            
+            whiteFlashR.RemoveComponent<SimpleSpriteFade>();
+            whiteFlashR.RemoveComponent<SpriteRenderer>();
         }
         
         //Targets the completion effect when returning to hall of gods
@@ -155,7 +158,10 @@ namespace LessFlashingLights
 
         private void OnWaveEffectStart(On.WaveEffectControl.orig_OnEnable orig, WaveEffectControl self)
         {
-            if (Gs.RemoveGenericFlashingEffects) self.spriteRenderer.enabled = false;
+            if (Gs.RemoveGenericFlashingEffects)
+            {
+                if(self.TryGetComponent<SpriteRenderer>(out var spriteRenderer)) spriteRenderer.enabled = false;
+            }
             orig(self);
         }
 
@@ -197,7 +203,7 @@ namespace LessFlashingLights
         private void OnFsmEnable(On.PlayMakerFSM.orig_OnEnable orig, PlayMakerFSM self)
         {
             orig(self);
-            //Log(self.name);
+
             if (self.name.Contains("Tele Out Corpse R(Clone)") && Gs.ToneDownMageLordFight)
             {
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
@@ -337,6 +343,66 @@ namespace LessFlashingLights
                 self.gameObject.GetComponent<MeshRenderer>().enabled = false;
             }
             
+            else if (self.name == "gg_battle_transitions(Clone)" && Gs.RemoveGodhomeFlashes)
+            {
+                GameObject battleEnter = self.gameObject.Child("battle_enter");
+                GameObject battleEnd = self.gameObject.Child("battle_end");//also used in HoG when starting a battle
+                GameObject finalBattle = self.gameObject.Child("battle_final");
+                
+                GameObject enterTransitionFlash = battleEnter.Child("pale_glower (2)");
+                
+                GameObject endTransitionFlash1 = battleEnd.Child("pale_glower (1)");
+                GameObject endTransitionFlash0 = battleEnd.Child("pale_glower");
+                GameObject battleEndParticles = battleEnd.Child("white_palace_particles");
+                
+                GameObject finalTransitionFlash1 = finalBattle.Child("pale_glower (1)");
+                GameObject finalTransitionFlash0 = finalBattle.Child("pale_glower");
+                GameObject finalTransitionParticles = finalBattle.Child("white_palace_particles");
+                //I haven't found yet where the "final" ones are used but let's remove them anyway
+                
+                if (enterTransitionFlash)
+                {
+                    enterTransitionFlash.GetComponent<SpriteRenderer>().enabled = false;
+                }
+
+                if (endTransitionFlash1)
+                {
+                    endTransitionFlash1.GetComponent<SpriteRenderer>().enabled = false;
+                }
+                
+                if (endTransitionFlash0)
+                {
+                    endTransitionFlash0.GetComponent<SpriteRenderer>().enabled = false;
+                }
+
+                if (finalTransitionFlash1)
+                {
+                    finalTransitionFlash1.GetComponent<SpriteRenderer>().enabled = false;
+                }
+
+                if (finalTransitionFlash0)
+                {
+                    finalTransitionFlash0.GetComponent<SpriteRenderer>().enabled = false;
+                }
+                
+                if(battleEndParticles) battleEndParticles.SetActive(false);
+                if(finalTransitionParticles) finalTransitionParticles.SetActive(false);
+                
+                GameObject transitionParticlesFG1 = battleEnter.Child("Particle System FG (1)");
+                GameObject transitionParticlesBG1 = battleEnter.Child("Particle System BG (1)");
+                GameObject transitionParticlesBG2 = battleEnter.Child("Particle System BG (2)");
+                GameObject transitionKnightMagicParticles = battleEnter.Child("knight_follow_magic");
+
+                if (transitionParticlesBG1 && transitionParticlesBG2 && 
+                    transitionParticlesFG1 && transitionKnightMagicParticles)
+                {
+                    transitionParticlesBG1.GetComponent<ParticleSystemRenderer>().enabled = false;
+                    transitionParticlesBG2.GetComponent<ParticleSystemRenderer>().enabled = false;
+                    transitionParticlesFG1.GetComponent<ParticleSystemRenderer>().enabled = false;
+                    transitionKnightMagicParticles.GetComponent<ParticleSystemRenderer>().enabled = false;
+                }
+            }
+            
             //crossroads explosions
             if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
             {
@@ -422,6 +488,11 @@ namespace LessFlashingLights
             else if (newScene.name == "Fungus3_archive_02" && Gs.RemoveQuirrelArchivesCutsceneFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveQuirrelArchivesCutsceneFlashes());
+            }
+            
+            else if (newScene.name == "GG_Hollow_Knight" && Gs.RemoveGodhomeFlashes)//PV got lucky enough to have their own transition flashes on top of the rest
+            {
+                GameManager.instance.StartCoroutine(RemovePVTransitionFlash());
             }
         }
 
@@ -879,6 +950,19 @@ namespace LessFlashingLights
             if (arriveFlash1)
             {
                 arriveFlash1.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+
+        private IEnumerator RemovePVTransitionFlash()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject whiteSceneGlow = GameObject.Find("/white_scene_glow");
+            GameObject whiteSceneGlow1 = GameObject.Find("/white_scene_glow (1)");
+            if (whiteSceneGlow && whiteSceneGlow1)
+            {
+                whiteSceneGlow.SetActive(false);
+                whiteSceneGlow1.SetActive(false);
             }
         }
 
