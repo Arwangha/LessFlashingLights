@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.1.5";
+        public override string GetVersion() => "1.0.1.6";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -674,9 +674,24 @@ namespace LessFlashingLights
                 }
             }
             
-            else if (enemy.name.Contains("Real Bat"))
+            else if (enemy.name.Contains("Real Bat") && Gs.ToneDownDeathExplosions)
             {
                 enemy.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
+            }
+            
+            else if (enemy.name == "White Defender" && Gs.RemoveBossScreams)
+            {
+                GameObject roarEffects = enemy.Child("Roar Effects");
+                
+                if (roarEffects)
+                {
+                    roarEffects.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+                    roarEffects.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
+                    roarEffects.Child("Pt Roar").GetComponent<ParticleSystemRenderer>().enabled = false;
+                }
+                
+                enemy.Child("Entry Glow").GetComponent<MeshRenderer>().enabled = false;
+                enemy.Child("Antic Flash").GetComponent<MeshRenderer>().enabled = false;
             }
             
             return isalreadydead;
