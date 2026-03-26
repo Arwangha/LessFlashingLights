@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.1.4";
+        public override string GetVersion() => "1.0.1.5";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -494,6 +494,11 @@ namespace LessFlashingLights
             {
                 GameManager.instance.StartCoroutine(RemovePVTransitionFlash());
             }
+            
+            else if (newScene.name == "Abyss_21" && Gs.RemoveSpellPickupsFlashes)
+            {
+                GameManager.instance.StartCoroutine(RemoveWingsPickupFlashes());
+            }
         }
 
         private bool OnEnableEnemy(GameObject enemy, bool isalreadydead)
@@ -963,6 +968,21 @@ namespace LessFlashingLights
             {
                 whiteSceneGlow.SetActive(false);
                 whiteSceneGlow1.SetActive(false);
+            }
+        }
+
+        private IEnumerator RemoveWingsPickupFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject shinyItemDJ = GameObject.Find("Shiny Item DJ");
+            if (shinyItemDJ)
+            {
+                GameObject djWhiteFlash = shinyItemDJ.Child("White Flash");
+                if (djWhiteFlash) djWhiteFlash.GetComponent<SpriteRenderer>().enabled = false;
+                
+                GameObject djWhiteWave = shinyItemDJ.Child("White Wave Get");
+                if (djWhiteWave) djWhiteWave.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
 
