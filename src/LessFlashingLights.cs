@@ -23,6 +23,7 @@ namespace LessFlashingLights
         private GameObject? _emptyGo;
         private bool _ghostExploding;//I do not remember what was the logic behind this, but I'm too scared to remove it
         private bool _inGrimmFight;//For disabling an FSM used in other places which breaks stuff when disabled outside the fight
+        private bool _inShadeSoulPickup;//Again, to only disable an FSM if we know what we're doing
 
         public override void Initialize()
         {
@@ -402,6 +403,11 @@ namespace LessFlashingLights
                     transitionKnightMagicParticles.GetComponent<ParticleSystemRenderer>().enabled = false;
                 }
             }
+
+            else if (self.name.Contains("white_light") && Gs.RemoveSpellPickupsFlashes && _inShadeSoulPickup)
+            {
+                self.gameObject.SetActive(false);
+            }
             
             //crossroads explosions
             if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
@@ -414,6 +420,7 @@ namespace LessFlashingLights
         {
             if (_ghostExploding) _ghostExploding = false;
             if(_inGrimmFight)  _inGrimmFight = false;//we've exited the fight. set to true when grimm/nkg gets enabled
+            if(_inShadeSoulPickup) _inShadeSoulPickup = false;
             
             if (newScene.name == "Crossroads_ShamanTemple" && Gs.RemoveSpellPickupsFlashes)
             {
@@ -498,6 +505,11 @@ namespace LessFlashingLights
             else if (newScene.name == "Abyss_21" && Gs.RemoveSpellPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveWingsPickupFlashes());
+            }
+            
+            else if (newScene.name == "Ruins1_31b")
+            {
+                _inShadeSoulPickup = true;
             }
         }
 
