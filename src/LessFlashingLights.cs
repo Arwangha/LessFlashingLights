@@ -13,7 +13,7 @@ namespace LessFlashingLights
     public class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.1.6";
+        public override string GetVersion() => "1.0.1.7";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -510,6 +510,11 @@ namespace LessFlashingLights
             else if (newScene.name == "Ruins1_31b")
             {
                 _inShadeSoulPickup = true;
+            }
+            
+            else if (newScene.name == "Dream_Nailcollection" && Gs.RemoveSpellPickupsFlashes)
+            {
+                GameManager.instance.StartCoroutine(RemoveDreamNailPickupFlashes());
             }
         }
 
@@ -1010,6 +1015,21 @@ namespace LessFlashingLights
                 
                 GameObject djWhiteWave = shinyItemDJ.Child("White Wave Get");
                 if (djWhiteWave) djWhiteWave.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+
+        private IEnumerator RemoveDreamNailPickupFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject dreamNailGet = GameObject.Find("Witch Control/Dream Nail Get");
+
+            if (dreamNailGet)
+            {
+                dreamNailGet.Child("Pickup Glow").GetComponent<MeshRenderer>().enabled = false;
+                dreamNailGet.Child("Get Flash").GetComponent<SpriteRenderer>().enabled = false;
+                
+                dreamNailGet.Child("Dream Nail").Child("Death Glow").GetComponent<MeshRenderer>().enabled = false;
             }
         }
 
