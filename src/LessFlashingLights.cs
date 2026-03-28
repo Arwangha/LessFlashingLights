@@ -90,8 +90,8 @@ namespace LessFlashingLights
             On.SpriteFlash.flashSporeQuick -= FlashHandler.OnFlashSpore;
             On.SpriteFlash.flashWhitePulse -= FlashHandler.OnFlashWhitePulse;
             
-            On.BossDoorChallengeUI.Show += OnBossDoorChallengeUIShow;
-            On.BossDoorChallengeUIBindingButton.SetAllSelected += OnAllBindingsSelected;
+            On.BossDoorChallengeUI.Show -= OnBossDoorChallengeUIShow;
+            On.BossDoorChallengeUIBindingButton.SetAllSelected -= OnAllBindingsSelected;
         }
         
         private void OnAllBindingsSelected(On.BossDoorChallengeUIBindingButton.orig_SetAllSelected orig, BossDoorChallengeUIBindingButton self, bool value)
@@ -515,6 +515,21 @@ namespace LessFlashingLights
             else if (newScene.name == "Dream_Nailcollection" && Gs.RemoveSpellPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveDreamNailPickupFlashes());
+            }
+            
+            else if (newScene.name == "GG_Atrium" && Gs.RemoveGodhomeFlashes)
+            {
+                //no idea why there's 5 in Atrium but let's be safe
+                GameManager.instance.StartCoroutine(RemoveAtriumPantheonUnlockFlashes("GG_Challenge_Door"));
+                GameManager.instance.StartCoroutine(RemoveAtriumPantheonUnlockFlashes("GG_Challenge_Door (1)"));
+                GameManager.instance.StartCoroutine(RemoveAtriumPantheonUnlockFlashes("GG_Challenge_Door (2)"));
+                GameManager.instance.StartCoroutine(RemoveAtriumPantheonUnlockFlashes("GG_Challenge_Door (3)"));
+                GameManager.instance.StartCoroutine(RemoveAtriumPantheonUnlockFlashes("GG_Challenge_Door (4)"));
+            }
+            
+            else if (newScene.name == "GG_Atrium_Roof" && Gs.RemoveGodhomeFlashes)
+            {
+                GameManager.instance.StartCoroutine(RemoveRoofPantheonUnlockFlashes());
             }
         }
 
@@ -1031,6 +1046,45 @@ namespace LessFlashingLights
                 
                 dreamNailGet.Child("Dream Nail").Child("Death Glow").GetComponent<MeshRenderer>().enabled = false;
             }
+        }
+
+        private IEnumerator RemoveAtriumPantheonUnlockFlashes(string bossDoorName)
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject door = GameObject.Find(bossDoorName);
+            
+            GameObject lockBreak = door.Child("Door").Child("Lock Break");
+            GameObject lockSet = door.Child("Door").Child("Lock Set");
+            
+            if (!lockBreak || !lockSet) yield break;
+            
+            lockSet.Child("white_fader").GetComponent<SpriteRenderer>().enabled = false;
+            lockSet.Child("Lock Break Antic Pt").GetComponent<ParticleSystemRenderer>().enabled = false;
+            
+            lockBreak.Child("White Flash R").SetActive(false);
+            lockBreak.Child("Death Glow").SetActive(false);
+            lockBreak.Child("glow pt").GetComponent<ParticleSystemRenderer>().enabled = false;
+        }
+        
+        //because of course this one has a different hierarchy
+        private IEnumerator RemoveRoofPantheonUnlockFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject door = GameObject.Find("GG_Final_Challenge_Door");
+            
+            GameObject lockBreak = door.Child("Lock Break");
+            GameObject lockSet = door.Child("Lock Set");
+            
+            if (!lockBreak || !lockSet) yield break;
+            
+            lockSet.Child("white_fader").GetComponent<SpriteRenderer>().enabled = false;
+            lockSet.Child("Lock Break Antic Pt").GetComponent<ParticleSystemRenderer>().enabled = false;
+            
+            lockBreak.Child("White Flash R").SetActive(false);
+            lockBreak.Child("Death Glow").SetActive(false);
+            lockBreak.Child("glow pt").GetComponent<ParticleSystemRenderer>().enabled = false;
         }
 
         private IEnumerator RemoveGrimmLanternFlashes()
