@@ -28,6 +28,13 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.RemoveDamageFlickering ? 0 : 1),
             
             new HorizontalOption(
+                name: "Tone down the knight's death",
+                description: "Removes some effects triggered by dying",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.ToneDownHeroDeath = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.ToneDownHeroDeath ? 0 : 1),
+            
+            new HorizontalOption(
                 name: "Remove spells flashes",
                 description: "Toggle for the flash effects triggered when casting spells",
                 values: new[] { "Yes", "No" },

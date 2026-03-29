@@ -7,6 +7,7 @@ public class GlobalSettings
     public bool RemoveInfectedHitFlashes = true;
     public bool RemoveLifebloodCollectionFlashes = true;
     public bool RemoveDamageFlickering = true;
+    public bool ToneDownHeroDeath =  true;
     public bool RemoveGrimmChildHitFlashes = true;
     public bool RemoveGenericEnemyHitFlashes = true;
     public bool ToneDownGrimmKinFights = true;

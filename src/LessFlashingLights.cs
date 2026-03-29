@@ -213,6 +213,19 @@ namespace LessFlashingLights
             GameObject knight = GameObject.Find("Knight");
             if(Gs.RemoveGenericHeroFlashes) knight.Child("white_light_donut").GetComponent<SpriteRenderer>().enabled = false; 
 
+            GameObject heroDeath = knight.Child("Hero Death");
+            if (heroDeath && Gs.ToneDownHeroDeath)
+            {
+                GameObject dreamImpact = heroDeath.Child("Dream Impact");
+                dreamImpact.RemoveComponent<MeshRenderer>();
+                dreamImpact.RemoveComponent<tk2dSprite>();
+                dreamImpact.RemoveComponent<tk2dSpriteAnimator>();
+                dreamImpact.RemoveComponent<DeactivateAfter2dtkAnimation>();
+                
+                heroDeath.Child("Death Crack").GetComponent<SpriteRenderer>().enabled = false;
+                heroDeath.Child("Hit Crack").GetComponent<SpriteRenderer>().enabled = false;
+            }
+            
             if(Gs.RemoveSpellFlashes)
             {
                 GameObject spells = knight.Child("Spells");
