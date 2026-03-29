@@ -18,17 +18,17 @@ namespace LessFlashingLights
             if(_inShadeSoulPickup) _inShadeSoulPickup = false;
             if(_inDreamerCutscene) _inDreamerCutscene = false;
             
-            if (newScene.name == "Crossroads_ShamanTemple" && Gs.RemoveSpellPickupsFlashes)
+            if (newScene.name == "Crossroads_ShamanTemple" && Gs.RemoveMajorItemPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveAncestralMoundFlashes());
             }
             
-            else if (newScene.name == "Room_Fungus_Shaman" && Gs.RemoveSpellPickupsFlashes)
+            else if (newScene.name == "Room_Fungus_Shaman" && Gs.RemoveMajorItemPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveOvergrownMoundFlashes());
             }
             
-            else if (newScene.name == "Ruins1_24" && Gs.RemoveSpellPickupsFlashes)
+            else if (newScene.name == "Ruins1_24" && Gs.RemoveMajorItemPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveRealQuakeFlashes());
             }
@@ -83,7 +83,7 @@ namespace LessFlashingLights
                 GameManager.instance.StartCoroutine(RemoveGrimmLanternFlashes());
             }
             
-            else if (newScene.name == "Fungus3_archive_02" && Gs.RemoveQuirrelArchivesCutsceneFlashes)
+            else if (newScene.name == "Fungus3_archive_02" && Gs.RemoveDreamerCutsceneFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveQuirrelArchivesCutsceneFlashes());
             }
@@ -93,7 +93,7 @@ namespace LessFlashingLights
                 GameManager.instance.StartCoroutine(RemovePVTransitionFlash());
             }
             
-            else if (newScene.name == "Abyss_21" && Gs.RemoveSpellPickupsFlashes)
+            else if (newScene.name == "Abyss_21" && Gs.RemoveMajorItemPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveWingsPickupFlashes());
             }
@@ -103,7 +103,7 @@ namespace LessFlashingLights
                 _inShadeSoulPickup = true;
             }
             
-            else if (newScene.name == "Dream_Nailcollection" && Gs.RemoveSpellPickupsFlashes)
+            else if (newScene.name == "Dream_Nailcollection" && Gs.RemoveMajorItemPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveDreamNailPickupFlashes());
             }
@@ -123,7 +123,7 @@ namespace LessFlashingLights
                 GameManager.instance.StartCoroutine(RemoveRoofPantheonUnlockFlashes());
             }
             
-            else if (newScene.name == "RestingGrounds_04" && Gs.RemoveQuirrelArchivesCutsceneFlashes)
+            else if (newScene.name == "RestingGrounds_04" && Gs.RemoveDreamerCutsceneFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveDreamersBindingShieldFlashes());
                 _inDreamerCutscene = true;

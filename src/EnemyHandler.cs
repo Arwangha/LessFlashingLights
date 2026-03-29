@@ -126,7 +126,7 @@ namespace LessFlashingLights
                 whiteFlash.GetComponent<SpriteRenderer>().enabled = false;
             }
             
-            else if (enemy.name.Contains("Ceiling Dropper"))
+            else if (enemy.name.Contains("Ceiling Dropper") && Gs.ToneDownExplosions)
             {
                 GameObject explosion = enemy.Child("Gas Explosion M2(Clone)");
                 if(explosion) explosion.Child("orange flash").SetActive(false);

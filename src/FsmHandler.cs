@@ -35,7 +35,7 @@ namespace LessFlashingLights
                     endFlashes.Child("End Flash 2").GetComponent<SpriteRenderer>().enabled = false;
                 }
                 
-                if(Gs.RemoveSpellPickupsFlashes)
+                if(Gs.RemoveMajorItemPickupsFlashes)
                 {
                     GameObject fakeQuakeParent = GameObject.Find("Quake Fake Parent");
                     if (fakeQuakeParent != null)
@@ -211,28 +211,28 @@ namespace LessFlashingLights
                 }
             }
 
-            else if (self.name.Contains("white_light") && Gs.RemoveSpellPickupsFlashes && _inShadeSoulPickup)
+            else if (self.name.Contains("white_light") && Gs.RemoveMajorItemPickupsFlashes && _inShadeSoulPickup)
             {
                 self.gameObject.SetActive(false);
             }
             
-            else if (self.name == "Cutscene Dreamer(Clone)" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            else if (self.name == "Cutscene Dreamer(Clone)" && Gs.RemoveDreamerCutsceneFlashes && _inDreamerCutscene)
             {
                 self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
                 self.gameObject.Child("Burst Pt").GetComponent<ParticleSystemRenderer>().enabled = false;
             }
             
-            else if (self.name == "Blast" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            else if (self.name == "Blast" && Gs.RemoveDreamerCutsceneFlashes && _inDreamerCutscene)
             {
                 self.gameObject.SetActive(false);
             }
             
-            else if (self.name == "dream_area_effect(Clone)" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            else if (self.name == "dream_area_effect(Clone)" && Gs.RemoveDreamerCutsceneFlashes && _inDreamerCutscene)
             {
                 self.gameObject.Child("lantern_glow_074").RemoveComponent<SpriteRenderer>();
             }
             
-            else if (self.name == "Init Blast" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            else if (self.name == "Init Blast" && Gs.RemoveDreamerCutsceneFlashes && _inDreamerCutscene)
             {
                 self.gameObject.SetActive(false);
             }

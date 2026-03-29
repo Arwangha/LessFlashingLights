@@ -18,7 +18,7 @@ public class GlobalSettings
     public bool RemoveBossScreams = true;
     public bool ToneDownDeathExplosions = true;
     public bool ToneDownWarriorDreamsFlashes = true;
-    public bool RemoveSpellPickupsFlashes = true;
+    public bool RemoveMajorItemPickupsFlashes = true;
     public bool ToneDownBirthPlaceFlashes = true;
     public bool ToneDownRadianceFightsFlashes = true;
     public bool ToneDownHornet2Fight = true;
@@ -30,5 +30,5 @@ public class GlobalSettings
     public bool RemoveCrestFlashes = true;
     public bool RemoveShadeGetFlashes = true;
     public bool RemoveGenericHeroFlashes = true;
-    public bool RemoveQuirrelArchivesCutsceneFlashes = true;
+    public bool RemoveDreamerCutsceneFlashes = true;
 }

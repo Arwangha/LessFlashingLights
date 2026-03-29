@@ -35,11 +35,11 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.RemoveSpellFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove spell pickups flashes",
-                description: "Toggle for the flash effects triggered when collecting spells",
+                name: "Remove major item pickups flashes",
+                description: "Such as spells, wings or dream nail",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.RemoveSpellPickupsFlashes = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.RemoveSpellPickupsFlashes ? 0 : 1),
+                applySetting: index => { LessFlashingLights.Gs.RemoveMajorItemPickupsFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveMajorItemPickupsFlashes ? 0 : 1),
             
             new HorizontalOption(
                 name: "Remove CDash flashes",
@@ -216,11 +216,11 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownGrimmLanternActivation ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove Quirrel Cutscene flashes",
-                description: "For flashes occurring while revealing Monomon",
+                name: "Remove Dreamer Cutscenes flashes",
+                description: "For flashes occurring in dreamer cutscenes",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.RemoveQuirrelArchivesCutsceneFlashes = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.RemoveQuirrelArchivesCutsceneFlashes ? 0 : 1),
+                applySetting: index => { LessFlashingLights.Gs.RemoveDreamerCutsceneFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveDreamerCutsceneFlashes ? 0 : 1),
             
             new HorizontalOption(
                 name: "Remove miscellaneous effects",
