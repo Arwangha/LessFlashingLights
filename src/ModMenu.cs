@@ -179,11 +179,11 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownGrimmKinFights ? 0 : 1),
             
             new HorizontalOption(
-                name: "Rem. THK chains breaking fl.",
-                description: "When freeing him during the first encounter",
+                name: "Rem. THK specific flashes",
+                description: "When freeing him and during self stabs",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.RemoveTHKChainBreakFlashes = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.RemoveTHKChainBreakFlashes ? 0 : 1),
+                applySetting: index => { LessFlashingLights.Gs.RemoveTHKSpecificFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveTHKSpecificFlashes ? 0 : 1),
             
             new TextPanel(name: "Miscellaneous effects"),
             

@@ -237,6 +237,11 @@ namespace LessFlashingLights
                 self.gameObject.SetActive(false);
             }
             
+            else if (self.name == "SelfStab Flash" && Gs.RemoveTHKSpecificFlashes)
+            {
+                self.gameObject.SetActive(false);
+            }
+            
             //crossroads explosions
             if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
             {

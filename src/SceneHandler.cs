@@ -134,7 +134,7 @@ namespace LessFlashingLights
                 _inDreamerCutscene = true;
             }
             
-            else if (newScene.name == "Room_Final_Boss_Core" && Gs.RemoveTHKChainBreakFlashes)
+            else if (newScene.name == "Room_Final_Boss_Core" && Gs.RemoveTHKSpecificFlashes)
             {
                 IEnumerable<GameObject> hollowKnightChains =
                     newScene.GetAllGameObjects().Where(o => o.name.Contains("hollow_knight_chain_base") && !o.name.Contains("("));
