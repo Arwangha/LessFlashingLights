@@ -35,7 +35,7 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.RemoveSpellFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove major item pickups flashes",
+                name: "Remove major item pickups fl.",
                 description: "Such as spells, wings or dream nail",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveMajorItemPickupsFlashes = index == 0; },
@@ -178,6 +178,13 @@ public static class ModMenu
                 applySetting: index => { LessFlashingLights.Gs.ToneDownGrimmKinFights = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.ToneDownGrimmKinFights ? 0 : 1),
             
+            new HorizontalOption(
+                name: "Rem. THK chains breaking fl.",
+                description: "When freeing him during the first encounter",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.RemoveTHKChainBreakFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveTHKChainBreakFlashes ? 0 : 1),
+            
             new TextPanel(name: "Miscellaneous effects"),
             
             new HorizontalOption(
@@ -195,8 +202,8 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownExplosions ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove Godhome-related flashes",
-                description: "includes statues and pantheons doors",
+                name: "Remove Godhome-specific fl.",
+                description: "includes statues, pantheons doors and transitions",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveGodhomeFlashes = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemoveGodhomeFlashes ? 0 : 1),
@@ -216,8 +223,8 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownGrimmLanternActivation ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove Dreamer Cutscenes flashes",
-                description: "For flashes occurring in dreamer cutscenes",
+                name: "Remove Dreamer Cutscenes fl.",
+                description: "In Greenpath, Resting Grounds and Archives",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveDreamerCutsceneFlashes = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemoveDreamerCutsceneFlashes ? 0 : 1),

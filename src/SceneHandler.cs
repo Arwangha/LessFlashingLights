@@ -133,6 +133,43 @@ namespace LessFlashingLights
             {
                 _inDreamerCutscene = true;
             }
+            
+            else if (newScene.name == "Room_Final_Boss_Core" && Gs.RemoveTHKChainBreakFlashes)
+            {
+                IEnumerable<GameObject> hollowKnightChains =
+                    newScene.GetAllGameObjects().Where(o => o.name.Contains("hollow_knight_chain_base") && !o.name.Contains("("));
+
+                foreach (GameObject chain in hollowKnightChains)
+                {
+                    GameObject sharpFlash = chain.Child("Sharp Flash");
+                    GameObject burst = chain.Child("Burst");
+
+                    if (sharpFlash)
+                    {
+                        sharpFlash.GetComponent<MeshRenderer>().enabled = false;
+                        sharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                    }
+
+                    if (burst)
+                    {
+                        burst.GetComponent<SpriteRenderer>().enabled = false;
+                    }
+                }
+                
+                GameObject bossControl = GameObject.Find("Boss Control");
+                GameObject shieldShatter = bossControl.Child("Shield Shatter");
+
+                if (shieldShatter)
+                {
+                    shieldShatter.GetComponent<SpriteRenderer>().enabled = false;
+                    GameObject shieldSharpFlash = shieldShatter.Child("Sharp Flash");
+                    if (shieldSharpFlash)
+                    {
+                        shieldSharpFlash.GetComponent<MeshRenderer>().enabled = false;
+                        shieldSharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                    }
+                }
+            }
         }
         
         private IEnumerator RemoveAncestralMoundFlashes()
