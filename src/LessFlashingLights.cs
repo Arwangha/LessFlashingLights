@@ -12,7 +12,7 @@ namespace LessFlashingLights
     public partial class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.1.7";
+        public override string GetVersion() => "1.0.1.8";
         
         public static GlobalSettings Gs { get; private set; } = new();
         
@@ -23,6 +23,7 @@ namespace LessFlashingLights
         private bool _ghostExploding;//I do not remember what was the logic behind this, but I'm too scared to remove it
         private bool _inGrimmFight;//For disabling an FSM used in other places which breaks stuff when disabled outside the fight
         private bool _inShadeSoulPickup;//Again, to only disable an FSM if we know what we're doing
+        private bool _inDreamerCutscene;
 
         public override void Initialize()
         {

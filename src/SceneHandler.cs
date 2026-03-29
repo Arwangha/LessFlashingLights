@@ -16,6 +16,7 @@ namespace LessFlashingLights
             if (_ghostExploding) _ghostExploding = false;
             if(_inGrimmFight)  _inGrimmFight = false;//we've exited the fight. set to true when grimm/nkg gets enabled
             if(_inShadeSoulPickup) _inShadeSoulPickup = false;
+            if(_inDreamerCutscene) _inDreamerCutscene = false;
             
             if (newScene.name == "Crossroads_ShamanTemple" && Gs.RemoveSpellPickupsFlashes)
             {
@@ -30,11 +31,6 @@ namespace LessFlashingLights
             else if (newScene.name == "Ruins1_24" && Gs.RemoveSpellPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveRealQuakeFlashes());
-            }
-            
-            else if (newScene.name == "Ruins1_24_boss" && (Gs.RemoveSpellPickupsFlashes || Gs.ToneDownMageLordFight))
-            {
-                GameManager.instance.StartCoroutine(RemoveFakeQuakeFlashes());
             }
             
             else if (newScene.name == "Dream_Abyss" && Gs.ToneDownBirthPlaceFlashes)
@@ -126,6 +122,17 @@ namespace LessFlashingLights
             {
                 GameManager.instance.StartCoroutine(RemoveRoofPantheonUnlockFlashes());
             }
+            
+            else if (newScene.name == "RestingGrounds_04" && Gs.RemoveQuirrelArchivesCutsceneFlashes)
+            {
+                GameManager.instance.StartCoroutine(RemoveDreamersBindingShieldFlashes());
+                _inDreamerCutscene = true;
+            }
+            
+            else if (newScene.name == "Fungus1_04")
+            {
+                _inDreamerCutscene = true;
+            }
         }
         
         private IEnumerator RemoveAncestralMoundFlashes()
@@ -155,6 +162,28 @@ namespace LessFlashingLights
             }
         }
 
+        private IEnumerator RemoveDreamersBindingShieldFlashes()
+        {
+            yield return null;
+            
+            GameObject dreamerScene = GameObject.Find("Dreamer Scene 2");
+            GameObject initBlast = dreamerScene.Child("Init Blast");
+            GameObject bindingShieldActivate = GameObject.Find("Binding Shield Activate");
+            GameObject bindingShieldStatues = bindingShieldActivate.Child("Binding Shield Statues");
+            
+            if(initBlast)
+            {
+                initBlast.GetComponent<MeshRenderer>().enabled = false;
+                initBlast.Child("Attack Pt").GetComponent<ParticleSystemRenderer>().enabled = false;
+            }
+
+            if (bindingShieldStatues)
+            {
+                bindingShieldStatues.Child("white_fader").GetComponent<SpriteRenderer>().enabled = false; 
+                bindingShieldStatues.Child("binding shield flash").GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+
         private IEnumerator RemoveOvergrownMoundFlashes()
         {
             yield return new WaitForFinishedEnteringScene();
@@ -165,25 +194,6 @@ namespace LessFlashingLights
             {
                 knightGetScream.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
                 knightGetScream.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
-            }
-        }
-
-        private IEnumerator RemoveFakeQuakeFlashes()
-        {
-            yield return new WaitForFinishedEnteringScene();
-            
-            GameObject quakeFakeParent = GameObject.Find("Quake Fake Parent");
-
-            if (quakeFakeParent)
-            {
-                GameObject knightGetQuakeFake = quakeFakeParent.Child("Knight Get Quake Fake");
-
-                if (knightGetQuakeFake)
-                {
-                    knightGetQuakeFake.Child("white_light 1").GetComponent<SpriteRenderer>().enabled = false;
-                    knightGetQuakeFake.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
-                    knightGetQuakeFake.Child("White Wave").GetComponent<SpriteRenderer>().enabled = false;
-                }
             }
         }
 

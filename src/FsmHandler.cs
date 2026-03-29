@@ -216,6 +216,27 @@ namespace LessFlashingLights
                 self.gameObject.SetActive(false);
             }
             
+            else if (self.name == "Cutscene Dreamer(Clone)" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            {
+                self.gameObject.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
+                self.gameObject.Child("Burst Pt").GetComponent<ParticleSystemRenderer>().enabled = false;
+            }
+            
+            else if (self.name == "Blast" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            {
+                self.gameObject.SetActive(false);
+            }
+            
+            else if (self.name == "dream_area_effect(Clone)" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            {
+                self.gameObject.Child("lantern_glow_074").RemoveComponent<SpriteRenderer>();
+            }
+            
+            else if (self.name == "Init Blast" && Gs.RemoveQuirrelArchivesCutsceneFlashes && _inDreamerCutscene)
+            {
+                self.gameObject.SetActive(false);
+            }
+            
             //crossroads explosions
             if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
             {
