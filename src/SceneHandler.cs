@@ -158,6 +158,7 @@ namespace LessFlashingLights
                 
                 GameObject bossControl = GameObject.Find("Boss Control");
                 GameObject shieldShatter = bossControl.Child("Shield Shatter");
+                GameObject hornetFlash = bossControl.Child("Hollow Knight Boss").Child("Hornet Flash");
 
                 if (shieldShatter)
                 {
@@ -168,6 +169,12 @@ namespace LessFlashingLights
                         shieldSharpFlash.GetComponent<MeshRenderer>().enabled = false;
                         shieldSharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
                     }
+                }
+
+                if (hornetFlash)
+                {
+                    hornetFlash.GetComponent<MeshRenderer>().enabled = false;
+                    hornetFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 }
             }
         }
