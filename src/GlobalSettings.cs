@@ -33,4 +33,5 @@ public class GlobalSettings
     public bool RemoveGenericHeroFlashes = true;
     public bool RemoveDreamerCutsceneFlashes = true;
     public bool RemoveTHKSpecificFlashes = true;
+    public bool RemoveWhiteDefenderFlashes = true;
 }

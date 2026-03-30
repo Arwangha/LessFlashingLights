@@ -11,13 +11,13 @@ This mod attempts to reduce the amount of flashing lights in the game. More spec
 - Using nail arts
 - Spells usage and spell collection animations
 - Obtaining mask shards and vessel fragments
-- Obtaining dream nail and its upgrades
+- Obtaining the dream nail and its upgrades
 - Obtaining major items such as Isma's tear, Monarch wings or Crystal heart
 - The knight's flickering animation when taking damage/respawning/collecting lifeblood/getting the shade back
 - The subtle flash when getting enough soul to use a spell
 - Whispering roots activation and essence collection
 
-## Enemy and boss flashes:
+## Enemies and bosses flashes:
 - Absolute Radiance and Radiance's death, orb impact, teleportation
 - Hornet's thread storm and parry
 - White Defender's spawn and some of his attacks
@@ -41,7 +41,7 @@ This mod attempts to reduce the amount of flashing lights in the game. More spec
 - Unlocking, completing and activating all bindings on a pantheon
 - Hall of Gods statues state switch (upon victory, spawn and dream lever activation)
 
-You can configure which of these effects to remove through the mod's menu. Due to the way the game reuses effects, some options may interact with each other. For instance, "Remove white hit flashes", which includes most enemies that flash white when hit, will also affect the healing flash. Similarly, part of the nail arts flashes come from Crystal Dash effects. Additionally, some settings require a save reload to be applied properly if changed while the game is paused.
+You can configure which of these effects to remove through the mod's menu. Due to the way the game reuses effects, some options may interact with each other. For instance, "Remove white hit flashes", which includes most enemies that flash white when hit, will also affect the healing flash. Similarly, part of the nail arts flashes comes from Crystal Dash effects. Additionally, some settings require a save reload to be applied properly if changed while the game is paused.
 
 ## What this mod doesn't do, but can be achieved with other mods:
 - Remove *most* particles (can be achieved with No Particles). There are some exceptions, such as particles occurring at the same time as some flashes.

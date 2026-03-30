@@ -184,7 +184,7 @@ namespace LessFlashingLights
                 enemy.Child("white_light").GetComponent<SpriteRenderer>().enabled = false;
             }
             
-            else if (enemy.name == "White Defender" && Gs.RemoveBossScreams)
+            else if (enemy.name == "White Defender" && Gs.RemoveWhiteDefenderFlashes)
             {
                 GameObject roarEffects = enemy.Child("Roar Effects");
                 

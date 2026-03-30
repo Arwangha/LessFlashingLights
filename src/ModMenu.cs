@@ -186,6 +186,13 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownGrimmKinFights ? 0 : 1),
             
             new HorizontalOption(
+                name: "Remove white defender's flashes",
+                description: "Includes his spawn and the dive animation",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.RemoveWhiteDefenderFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveWhiteDefenderFlashes ? 0 : 1),
+            
+            new HorizontalOption(
                 name: "Rem. THK specific flashes",
                 description: "When freeing him and during self stabs",
                 values: new[] { "Yes", "No" },
