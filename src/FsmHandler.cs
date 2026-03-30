@@ -247,6 +247,25 @@ namespace LessFlashingLights
                 self.gameObject.SetActive(false);
             }
             
+            else if (self.name == "Grimmchild(Clone)" && Gs.RemoveGrimmChildFlashes)
+            {
+                GameObject grimmChildBurst = self.gameObject.Child("Burst");
+                GameObject grimmChildBurst2 = self.gameObject.Child("Burst 2");
+
+                if (grimmChildBurst && grimmChildBurst2)
+                {
+                    grimmChildBurst.RemoveComponent<MeshRenderer>();
+                    grimmChildBurst.RemoveComponent<tk2dSprite>();
+                    grimmChildBurst.RemoveComponent<tk2dSpriteAnimator>();
+                    grimmChildBurst.RemoveComponent<DeactivateAfter2dtkAnimation>();
+                
+                    grimmChildBurst2.RemoveComponent<MeshRenderer>();
+                    grimmChildBurst2.RemoveComponent<tk2dSprite>();
+                    grimmChildBurst2.RemoveComponent<tk2dSpriteAnimator>();
+                    grimmChildBurst2.RemoveComponent<DeactivateAfter2dtkAnimation>();
+                }
+            }
+            
             //crossroads explosions
             if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
             {

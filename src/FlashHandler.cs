@@ -34,7 +34,7 @@ public static class FlashHandler
 
     public static void OnFlashGrimmHit(On.SpriteFlash.orig_FlashGrimmHit orig, SpriteFlash self)//when grimmchild hits something
     {
-        if(!LessFlashingLights.Gs.RemoveGrimmChildHitFlashes) orig(self);
+        if(!LessFlashingLights.Gs.RemoveGrimmChildFlashes) orig(self);
     }
 
     public static void OnFlashGrimmFlame(On.SpriteFlash.orig_FlashGrimmflame orig, SpriteFlash self)//collecting grimm flames

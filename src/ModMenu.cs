@@ -114,11 +114,11 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.RemoveInfectedHitFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove GrimmChild hit flashes",
-                description: "Remove the flash effect on enemies hit by GrimmChild",
+                name: "Removes GrimmChild flashes",
+                description: "Remove his spawn's flashes & the flickering on enemies hit by his flames",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.RemoveGrimmChildHitFlashes = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.RemoveGrimmChildHitFlashes ? 0 : 1),
+                applySetting: index => { LessFlashingLights.Gs.RemoveGrimmChildFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveGrimmChildFlashes ? 0 : 1),
             
             new HorizontalOption(
                 name: "Remove white hit flashes",
@@ -172,7 +172,7 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.ToneDownUumuuFight ? 0 : 1),
             
             new HorizontalOption(
-                name: "Tone down the Hornet fights",
+                name: "Tone down Hornet fights",
                 description: "Reduces the wind, removes parry and thread storm flashes",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.ToneDownHornetfights = index == 0; },
