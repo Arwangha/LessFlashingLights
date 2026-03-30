@@ -242,11 +242,13 @@ namespace LessFlashingLights
                 self.gameObject.SetActive(false);
             }
             
+            //hornet counter & thread storm
             else if ((self.name == "Counter Flash" || self.name == "Flash Effect") && _inHornetFight && Gs.ToneDownHornetfights)
             {
                 self.gameObject.SetActive(false);
             }
             
+            //grimmchild spawn/despawn
             else if (self.name == "Grimmchild(Clone)" && Gs.RemoveGrimmChildFlashes)
             {
                 GameObject grimmChildBurst = self.gameObject.Child("Burst");
@@ -266,6 +268,7 @@ namespace LessFlashingLights
                 }
             }
             
+            //for soul vessel/mash shards
             else if (self.name == "Get Glow" && Gs.RemoveMajorItemPickupsFlashes)
             {
                 self.gameObject.SetActive(false);
