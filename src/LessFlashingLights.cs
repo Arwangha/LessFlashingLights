@@ -12,7 +12,7 @@ namespace LessFlashingLights
     public partial class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<GlobalSettings>, ICustomMenuMod
     {
         public new string GetName() => "Less Flashing Lights";
-        public override string GetVersion() => "1.0.1.10";
+        public override string GetVersion() => "1.0.1.11";
         
         public static GlobalSettings Gs { get; private set; } = new();
         

@@ -134,6 +134,16 @@ namespace LessFlashingLights
                 _inDreamerCutscene = true;
             }
             
+            else if (newScene.name == "RestingGrounds_07" && Gs.RemoveMajorItemPickupsFlashes)
+            {
+                GameManager.instance.StartCoroutine(RemoveDreamNailUpgradeFlashes());
+            }
+            
+            else if (newScene.name == "Waterways_13" && Gs.RemoveMajorItemPickupsFlashes)
+            {
+                GameManager.instance.StartCoroutine(RemoveIsmaObtentionFlashes());
+            }
+            
             else if (newScene.name == "Room_Final_Boss_Core" && Gs.RemoveTHKSpecificFlashes)
             {
                 IEnumerable<GameObject> hollowKnightChains =
@@ -159,6 +169,7 @@ namespace LessFlashingLights
                 GameObject bossControl = GameObject.Find("Boss Control");
                 GameObject shieldShatter = bossControl.Child("Shield Shatter");
                 GameObject hornetFlash = bossControl.Child("Hollow Knight Boss").Child("Hornet Flash");
+                GameObject counterFlash = bossControl.Child("Hollow Knight Boss").Child("Counter Flash");
 
                 if (shieldShatter)
                 {
@@ -175,6 +186,12 @@ namespace LessFlashingLights
                 {
                     hornetFlash.GetComponent<MeshRenderer>().enabled = false;
                     hornetFlash.GetComponent<PlayMakerFSM>().enabled = false;
+                }
+
+                if (counterFlash)
+                {
+                    counterFlash.GetComponent<MeshRenderer>().enabled = false;
+                    counterFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 }
             }
         }
@@ -202,6 +219,43 @@ namespace LessFlashingLights
                 {
                     summonFx.Child("White Flash").GetComponent<SpriteRenderer>().enabled = false;
                     summonFx.Child("Get Glow").GetComponent<MeshRenderer>().enabled = false;
+                }
+            }
+        }
+
+        private IEnumerator RemoveIsmaObtentionFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+
+            GameObject shinyItemAcid = GameObject.Find("Shiny Item Acid");
+
+            if (!shinyItemAcid) yield break;
+            
+            GameObject acidFlash = shinyItemAcid.Child("Flash");
+            
+            if (acidFlash)
+            {
+                acidFlash.GetComponent<SpriteRenderer>().enabled = false;
+                acidFlash.GetComponent<PlayMakerFSM>().enabled = false;
+            }
+        }
+
+        private IEnumerator RemoveDreamNailUpgradeFlashes()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject dreamMoth = GameObject.Find("Dream Moth");
+            if (dreamMoth)
+            {
+                GameObject mothFlash = dreamMoth.Child("Flash");
+                GameObject dreamImpact = dreamMoth.Child("Dream Impact");
+
+                if (dreamImpact && mothFlash)
+                {
+                    dreamImpact.GetComponent<MeshRenderer>().enabled = false;
+                    dreamImpact.GetComponent<PlayMakerFSM>().enabled = false;
+                    mothFlash.GetComponent<MeshRenderer>().enabled = false;
+                    mothFlash.GetComponent<PlayMakerFSM>().enabled = false;
                 }
             }
         }
@@ -338,6 +392,15 @@ namespace LessFlashingLights
             {
                 whiteSceneGlow.SetActive(false);
                 whiteSceneGlow1.SetActive(false);
+            }
+            
+            GameObject counterFlash = GameObject.Find("/Battle Scene/HK Prime/Counter Flash");
+            if (counterFlash)
+            {
+                counterFlash.RemoveComponent<MeshRenderer>();
+                counterFlash.RemoveComponent<tk2dSprite>();
+                counterFlash.RemoveComponent<tk2dSpriteAnimator>();
+                counterFlash.RemoveComponent<DeactivateAfter2dtkAnimation>();
             }
         }
 
