@@ -22,6 +22,7 @@ namespace LessFlashingLights
         private GameObject? _emptyGo;
         private bool _ghostExploding;//I do not remember what was the logic behind this, but I'm too scared to remove it
         private bool _inGrimmFight;//For disabling an FSM used in other places which breaks stuff when disabled outside the fight
+        private bool _inHornetFight;//for both of them
         private bool _inShadeSoulPickup;//Again, to only disable an FSM if we know what we're doing
         private bool _inDreamerCutscene;
 

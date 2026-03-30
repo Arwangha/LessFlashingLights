@@ -199,6 +199,11 @@ namespace LessFlashingLights
                 enemy.Child("Antic Flash").GetComponent<MeshRenderer>().enabled = false;
             }
             
+            else if (enemy.name.Contains("Hornet Boss"))
+            {
+                _inHornetFight = true;
+            }
+            
             return isalreadydead;
         }
     }

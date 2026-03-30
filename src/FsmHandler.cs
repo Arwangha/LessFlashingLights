@@ -242,6 +242,11 @@ namespace LessFlashingLights
                 self.gameObject.SetActive(false);
             }
             
+            else if ((self.name == "Counter Flash" || self.name == "Flash Effect") && _inHornetFight)
+            {
+                self.gameObject.SetActive(false);
+            }
+            
             //crossroads explosions
             if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
             {

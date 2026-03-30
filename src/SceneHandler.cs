@@ -17,6 +17,7 @@ namespace LessFlashingLights
             if(_inGrimmFight)  _inGrimmFight = false;//we've exited the fight. set to true when grimm/nkg gets enabled
             if(_inShadeSoulPickup) _inShadeSoulPickup = false;
             if(_inDreamerCutscene) _inDreamerCutscene = false;
+            if(_inHornetFight) _inHornetFight = false;
             
             if (newScene.name == "Crossroads_ShamanTemple" && Gs.RemoveMajorItemPickupsFlashes)
             {
@@ -394,13 +395,21 @@ namespace LessFlashingLights
                 whiteSceneGlow1.SetActive(false);
             }
             
-            GameObject counterFlash = GameObject.Find("/Battle Scene/HK Prime/Counter Flash");
+            GameObject battleScene = GameObject.Find("Battle Scene");
+            GameObject counterFlash = battleScene.Child("HK Prime").Child("Counter Flash");
             if (counterFlash)
             {
                 counterFlash.RemoveComponent<MeshRenderer>();
                 counterFlash.RemoveComponent<tk2dSprite>();
                 counterFlash.RemoveComponent<tk2dSpriteAnimator>();
                 counterFlash.RemoveComponent<DeactivateAfter2dtkAnimation>();
+            }
+            
+            GameObject burstLines = battleScene.Child("HK_Prime_Burst_Chunks").Child("Burst Line");
+            if (burstLines)
+            {
+                burstLines.GetComponent<SpriteRenderer>().enabled = false;
+                burstLines.GetComponent<PlayMakerFSM>().enabled = false;
             }
         }
 
