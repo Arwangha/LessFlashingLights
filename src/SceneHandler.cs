@@ -64,7 +64,7 @@ namespace LessFlashingLights
                 }
             }
 
-            else if (newScene.name == "Deepnest_East_Hornet" && Gs.ToneDownHornet2Fight)
+            else if (newScene.name == "Deepnest_East_Hornet" && Gs.ToneDownHornetfights)
             {
                 IEnumerable<GameObject> blizzardParticles =
                     newScene.GetAllGameObjects().Where(o => o.name.Contains("blizzard_particles"));
@@ -143,6 +143,11 @@ namespace LessFlashingLights
             else if (newScene.name == "Waterways_13" && Gs.RemoveMajorItemPickupsFlashes)
             {
                 GameManager.instance.StartCoroutine(RemoveIsmaObtentionFlashes());
+            }
+            
+            else if (newScene.name == "Grimm_Main_Tent" && Gs.ToneDownGrimmKinFights)
+            {
+                GameManager.instance.StartCoroutine(RemoveGrimmLightUpFlash());
             }
             
             else if (newScene.name == "Room_Final_Boss_Core" && Gs.RemoveTHKSpecificFlashes)
@@ -461,6 +466,29 @@ namespace LessFlashingLights
             lockBreak.Child("Death Glow").SetActive(false);
             lockBreak.Child("glow pt").GetComponent<ParticleSystemRenderer>().enabled = false;
         }
+
+        private IEnumerator RemoveGrimmLightUpFlash()
+        {
+            yield return new WaitForFinishedEnteringScene();
+            
+            GameObject grimmHolder = GameObject.Find("Grimm Holder");
+            
+            if(!grimmHolder) yield break;
+
+            GameObject grimmScene = grimmHolder.Child("Grimm Scene");
+
+            if (!grimmScene) yield break;
+
+            GameObject lightUpFlash = grimmScene.Child("Light Up Flash");
+
+            if (lightUpFlash)
+            {
+                Log("got light up flash");
+                
+                lightUpFlash.GetComponent<SpriteRenderer>().enabled = false;
+                lightUpFlash.GetComponent<PlayMakerFSM>().enabled = false;
+            }
+        }
         
         //because of course this one has a different hierarchy
         private IEnumerator RemoveRoofPantheonUnlockFlashes()
@@ -493,7 +521,7 @@ namespace LessFlashingLights
                 sycophantHitFlash.GetComponent<SpriteRenderer>().enabled = false;
             }
             
-            GameObject grimmBrazier = GameObject.Find("/Nightmare Lantern/lantern_dream/big_lantern/grimm_brazier");
+            GameObject grimmBrazier = GameObject.Find("Nightmare Lantern").Child("lantern_dream").Child("big_lantern").Child("grimm_brazier");
             if (grimmBrazier)
             {
                 GameObject lightFlash = grimmBrazier.Child("Light Flash");

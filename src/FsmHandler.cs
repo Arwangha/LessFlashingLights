@@ -242,7 +242,7 @@ namespace LessFlashingLights
                 self.gameObject.SetActive(false);
             }
             
-            else if ((self.name == "Counter Flash" || self.name == "Flash Effect") && _inHornetFight)
+            else if ((self.name == "Counter Flash" || self.name == "Flash Effect") && _inHornetFight && Gs.ToneDownHornetfights)
             {
                 self.gameObject.SetActive(false);
             }
