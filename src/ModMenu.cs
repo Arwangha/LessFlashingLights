@@ -43,7 +43,7 @@ public static class ModMenu
             
             new HorizontalOption(
                 name: "Remove major item pickups fl.",
-                description: "Such as spells, wings or dream nail",
+                description: "Such as spells, mask shards, vessel fragments, wings or dream nail",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveMajorItemPickupsFlashes = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemoveMajorItemPickupsFlashes ? 0 : 1),

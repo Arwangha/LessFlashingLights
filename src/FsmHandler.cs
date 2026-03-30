@@ -266,6 +266,11 @@ namespace LessFlashingLights
                 }
             }
             
+            else if (self.name == "Get Glow" && Gs.RemoveMajorItemPickupsFlashes)
+            {
+                self.gameObject.SetActive(false);
+            }
+            
             //crossroads explosions
             if (self.name == "Gas Explosion L(Clone)" && Gs.ToneDownExplosions)
             {
