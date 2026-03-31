@@ -89,9 +89,9 @@ namespace LessFlashingLights
                 GameManager.instance.StartCoroutine(RemoveQuirrelArchivesCutsceneFlashes());
             }
             
-            else if (newScene.name == "GG_Hollow_Knight" && Gs.RemoveGodhomeFlashes)//PV got lucky enough to have their own transition flashes on top of the rest
+            else if (newScene.name == "GG_Hollow_Knight")//PV got lucky enough to have their own transition flashes on top of the rest
             {
-                GameManager.instance.StartCoroutine(RemovePVTransitionFlash());
+                GameManager.instance.StartCoroutine(RemovePVFlashes());
             }
             
             else if (newScene.name == "Abyss_21" && Gs.RemoveMajorItemPickupsFlashes)
@@ -388,33 +388,43 @@ namespace LessFlashingLights
             }
         }
 
-        private IEnumerator RemovePVTransitionFlash()
+        private IEnumerator RemovePVFlashes()
         {
             yield return new WaitForFinishedEnteringScene();
-            
-            GameObject whiteSceneGlow = GameObject.Find("/white_scene_glow");
-            GameObject whiteSceneGlow1 = GameObject.Find("/white_scene_glow (1)");
-            if (whiteSceneGlow && whiteSceneGlow1)
-            {
-                whiteSceneGlow.SetActive(false);
-                whiteSceneGlow1.SetActive(false);
-            }
-            
+
             GameObject battleScene = GameObject.Find("Battle Scene");
-            GameObject counterFlash = battleScene.Child("HK Prime").Child("Counter Flash");
-            if (counterFlash)
-            {
-                counterFlash.RemoveComponent<MeshRenderer>();
-                counterFlash.RemoveComponent<tk2dSprite>();
-                counterFlash.RemoveComponent<tk2dSpriteAnimator>();
-                counterFlash.RemoveComponent<DeactivateAfter2dtkAnimation>();
-            }
             
-            GameObject burstLines = battleScene.Child("HK_Prime_Burst_Chunks").Child("Burst Line");
-            if (burstLines)
+            if (Gs.RemovePureVesselFlashes)
             {
-                burstLines.GetComponent<SpriteRenderer>().enabled = false;
-                burstLines.GetComponent<PlayMakerFSM>().enabled = false;
+                GameObject whiteSceneGlow = GameObject.Find("/white_scene_glow");
+                GameObject whiteSceneGlow1 = GameObject.Find("/white_scene_glow (1)");
+                if (whiteSceneGlow && whiteSceneGlow1)
+                {
+                    whiteSceneGlow.SetActive(false);
+                    whiteSceneGlow1.SetActive(false);
+                }
+                
+                GameObject counterFlash = battleScene.Child("HK Prime").Child("Counter Flash");
+                if (counterFlash)
+                {
+                    counterFlash.RemoveComponent<MeshRenderer>();
+                    counterFlash.RemoveComponent<tk2dSprite>();
+                    counterFlash.RemoveComponent<tk2dSpriteAnimator>();
+                    counterFlash.RemoveComponent<DeactivateAfter2dtkAnimation>();
+                }
+                
+                GameObject burstLines = battleScene.Child("HK_Prime_Burst_Chunks").Child("Burst Line");
+                if (burstLines)
+                {
+                    burstLines.GetComponent<SpriteRenderer>().enabled = false;
+                    burstLines.GetComponent<PlayMakerFSM>().enabled = false;
+                }
+            }
+
+            GameObject tendrilFlash = battleScene.Child("Tendril Flash");
+            if (tendrilFlash && Gs.RemovePureVesselTendrils)
+            {
+                tendrilFlash.GetComponent<SpriteRenderer>().enabled = false;
             }
         }
 

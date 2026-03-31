@@ -27,7 +27,8 @@ This mod attempts to reduce the amount of flashing lights in the game. More spec
 - Most enemies hit effects, including normal hits and hits from grimmchild, defender's crest and sporeshroom
 - Soul Master and Tyrant fake death, teleportation and dive
 - Soul twisters and soul warriors teleportation
-- The Hollow Knight's liberation, self stabs and Hornet intervention
+- The Hollow Knight's liberation, parry, self stabs and Hornet intervention
+- Pure Vessel's intro, parry and void tendrils
 - Grimm, NKG, grimmkins and grimmchild's apparitions, teleportations and some attacks, and Nightmare lantern activation
 - Boss screams and deaths (to some degree)
 

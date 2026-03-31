@@ -198,6 +198,20 @@ public static class ModMenu
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveTHKSpecificFlashes = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemoveTHKSpecificFlashes ? 0 : 1),
+
+            new HorizontalOption(
+                name: "Rem. Pure Vessel flashes",
+                description: "Specifically his intro and parry",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.RemovePureVesselFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemovePureVesselFlashes ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Rem. PV tendrils flashes",
+                description: "Dedicated setting since keeping them helps with the attack visibility",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.RemovePureVesselTendrils = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemovePureVesselTendrils ? 0 : 1),
             
             new TextPanel(name: "Miscellaneous effects"),
             

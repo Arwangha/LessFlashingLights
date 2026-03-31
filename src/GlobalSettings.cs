@@ -34,4 +34,6 @@ public class GlobalSettings
     public bool RemoveDreamerCutsceneFlashes = true;
     public bool RemoveTHKSpecificFlashes = true;
     public bool RemoveWhiteDefenderFlashes = true;
+    public bool RemovePureVesselFlashes = true;
+    public bool RemovePureVesselTendrils = true;
 }
