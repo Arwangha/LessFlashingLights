@@ -230,7 +230,7 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.RemoveGodhomeTransitionsParticles ? 0 : 1),
             
             new HorizontalOption(
-                name: "Remove other Godhome-specific fl.",
+                name: "Remove other Godhome fl.",
                 description: "includes unlocking and completing pantheons and boss statues",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveOtherGodhomeFlashes = index == 0; },

@@ -38,7 +38,7 @@ public partial class LessFlashingLights
         ),
         
         GOPredicate(
-            name => name.Contains("Mage") && !name.Contains("Blob") && !name.Contains("Balloon") && Gs!.ToneDownMageLordFight,
+            name => name.Contains("Mage") && !name.Contains("Blob") && !name.Contains("Balloon") && !name.Contains("Knight") && Gs!.ToneDownMageLordFight,
             RemoveSoulTwisterFlashes
         ),
         
