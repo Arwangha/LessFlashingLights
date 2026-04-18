@@ -114,8 +114,8 @@ public static class ModMenu
                 loadSetting: () => LessFlashingLights.Gs.RemoveInfectedHitFlashes ? 0 : 1),
             
             new HorizontalOption(
-                name: "Removes GrimmChild flashes",
-                description: "Remove his spawn's flashes & the flickering on enemies hit by his flames",
+                name: "Remove GrimmChild flashes",
+                description: "Removes its spawn's flashes & the flickering on enemies hit by its flames",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveGrimmChildFlashes = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemoveGrimmChildFlashes ? 0 : 1),
@@ -194,14 +194,14 @@ public static class ModMenu
             
             new HorizontalOption(
                 name: "Rem. THK specific flashes",
-                description: "When freeing him and during self stabs",
+                description: "When freeing it and during self stabs",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemoveTHKSpecificFlashes = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemoveTHKSpecificFlashes ? 0 : 1),
 
             new HorizontalOption(
                 name: "Rem. Pure Vessel flashes",
-                description: "Specifically his intro and parry",
+                description: "Specifically its intro and parry",
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.RemovePureVesselFlashes = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemovePureVesselFlashes ? 0 : 1),
