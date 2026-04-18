@@ -2,7 +2,9 @@ namespace LessFlashingLights;
 
 public class GlobalSettings
 {
-    public bool RemoveGodhomeFlashes = true;
+    public bool RemoveOtherGodhomeFlashes = true;
+    public bool RemoveGodhomeTransitionsFlashes = true;
+    public bool RemoveGodhomeTransitionsParticles = true;
     public bool ToneDownDreamOrbs = true;
     public bool RemoveInfectedHitFlashes = true;
     public bool RemoveLifebloodCollectionFlashes = true;

@@ -92,46 +92,42 @@ public partial class LessFlashingLights
         GameObject finalTransitionParticles = finalBattle.Child("white_palace_particles");
         //I haven't found yet where the "final" ones are used but let's remove them anyway
             
-        if (enterTransitionFlash)
+        if(Gs.RemoveGodhomeTransitionsFlashes)
         {
-            enterTransitionFlash.GetComponent<SpriteRenderer>().enabled = false;
+           if (enterTransitionFlash)
+               enterTransitionFlash.GetComponent<SpriteRenderer>().enabled = false;
+   
+           if (endTransitionFlash1)
+               endTransitionFlash1.GetComponent<SpriteRenderer>().enabled = false;
+               
+           if (endTransitionFlash0)
+               endTransitionFlash0.GetComponent<SpriteRenderer>().enabled = false;
+   
+           if (finalTransitionFlash1)
+               finalTransitionFlash1.GetComponent<SpriteRenderer>().enabled = false;
+   
+           if (finalTransitionFlash0)
+               finalTransitionFlash0.GetComponent<SpriteRenderer>().enabled = false;
         }
 
-        if (endTransitionFlash1)
+        if (Gs.RemoveGodhomeTransitionsParticles)
         {
-            endTransitionFlash1.GetComponent<SpriteRenderer>().enabled = false;
-        }
-            
-        if (endTransitionFlash0)
-        {
-            endTransitionFlash0.GetComponent<SpriteRenderer>().enabled = false;
-        }
-
-        if (finalTransitionFlash1)
-        {
-            finalTransitionFlash1.GetComponent<SpriteRenderer>().enabled = false;
-        }
-
-        if (finalTransitionFlash0)
-        {
-            finalTransitionFlash0.GetComponent<SpriteRenderer>().enabled = false;
-        }
-            
-        if(battleEndParticles) battleEndParticles.SetActive(false);
-        if(finalTransitionParticles) finalTransitionParticles.SetActive(false);
-            
-        GameObject transitionParticlesFG1 = battleEnter.Child("Particle System FG (1)");
-        GameObject transitionParticlesBG1 = battleEnter.Child("Particle System BG (1)");
-        GameObject transitionParticlesBG2 = battleEnter.Child("Particle System BG (2)");
-        GameObject transitionKnightMagicParticles = battleEnter.Child("knight_follow_magic");
-
-        if (transitionParticlesBG1 && transitionParticlesBG2 && 
-            transitionParticlesFG1 && transitionKnightMagicParticles)
-        {
-            transitionParticlesBG1.GetComponent<ParticleSystemRenderer>().enabled = false;
-            transitionParticlesBG2.GetComponent<ParticleSystemRenderer>().enabled = false;
-            transitionParticlesFG1.GetComponent<ParticleSystemRenderer>().enabled = false;
-            transitionKnightMagicParticles.GetComponent<ParticleSystemRenderer>().enabled = false;
+            if(battleEndParticles) battleEndParticles.SetActive(false);
+            if(finalTransitionParticles) finalTransitionParticles.SetActive(false);
+                
+            GameObject transitionParticlesFG1 = battleEnter.Child("Particle System FG (1)");
+            GameObject transitionParticlesBG1 = battleEnter.Child("Particle System BG (1)");
+            GameObject transitionParticlesBG2 = battleEnter.Child("Particle System BG (2)");
+            GameObject transitionKnightMagicParticles = battleEnter.Child("knight_follow_magic");
+    
+            if (transitionParticlesBG1 && transitionParticlesBG2 && 
+                transitionParticlesFG1 && transitionKnightMagicParticles)
+            {
+                transitionParticlesBG1.GetComponent<ParticleSystemRenderer>().enabled = false;
+                transitionParticlesBG2.GetComponent<ParticleSystemRenderer>().enabled = false;
+                transitionParticlesFG1.GetComponent<ParticleSystemRenderer>().enabled = false;
+                transitionKnightMagicParticles.GetComponent<ParticleSystemRenderer>().enabled = false;
+            }
         }
     }
     
@@ -298,7 +294,7 @@ public partial class LessFlashingLights
                 RemoveGrimmchildFlashes(self);
                 break;
             
-            case "gg_battle_transitions(Clone)" when Gs.RemoveGodhomeFlashes:
+            case "gg_battle_transitions(Clone)" when Gs.RemoveGodhomeTransitionsFlashes || Gs.RemoveGodhomeTransitionsParticles:
                 RemoveGodhomeFlashes(self);
                 break;
             

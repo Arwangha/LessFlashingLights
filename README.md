@@ -12,7 +12,7 @@ This mod attempts to reduce the amount of flashing lights in the game. More spec
 - Spells usage and spell collection animations
 - Obtaining mask shards and vessel fragments
 - Obtaining the dream nail and its upgrades
-- Obtaining major items such as Isma's tear, Monarch wings or Crystal heart
+- Obtaining major items such as Isma's tear, Monarch wings, Crystal heart or KingSoul
 - The knight's flickering animation when taking damage/respawning/collecting lifeblood/getting the shade back
 - The subtle flash when getting enough soul to use a spell
 - Whispering roots activation and essence collection

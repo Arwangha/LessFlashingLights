@@ -96,7 +96,7 @@ public partial class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<Gl
     {
         orig(self, value);
 
-        if (!value || !Gs.RemoveGodhomeFlashes) return;
+        if (!value || !Gs.RemoveOtherGodhomeFlashes) return;
             
         self.gameObject.Child("AllFlashEffect").SetActive(false);
     }
@@ -105,7 +105,7 @@ public partial class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<Gl
     {
         orig(self);
 
-        if (!Gs.RemoveGodhomeFlashes) return;
+        if (!Gs.RemoveOtherGodhomeFlashes) return;
 
         GameObject bossDoorSelectAllFlash = self.gameObject.Child("Panel").Child("Select All Flash");
         if (!bossDoorSelectAllFlash) return;
@@ -126,20 +126,20 @@ public partial class LessFlashingLights : Mod, ITogglableMod, IGlobalSettings<Gl
     //Targets the completion effect when returning to hall of gods
     private void OnBossTrophyTierCompleteEffect(On.BossStatueTrophyPlaque.orig_DoTierCompleteEffect orig, BossStatueTrophyPlaque self, BossStatueTrophyPlaque.DisplayType type)
     {
-        if(!Gs.RemoveGodhomeFlashes) orig(self, type);
+        if(!Gs.RemoveOtherGodhomeFlashes) orig(self, type);
     }
 
     //Spawn anim
     private IEnumerator OnBossStatueFlashRoutine(On.BossStatueFlashEffect.orig_FlashRoutine orig, BossStatueFlashEffect self)
     {
-        if(Gs.RemoveGodhomeFlashes) self.transform.Translate(new Vector3(2000f, 0f, 0f));//yeet the animation offscreen
+        if(Gs.RemoveOtherGodhomeFlashes) self.transform.Translate(new Vector3(2000f, 0f, 0f));//yeet the animation offscreen
         yield return orig(self);
     }
         
     //Dream toggle
     private IEnumerator OnDreamToggleFade(On.BossStatueDreamToggle.orig_Fade orig, BossStatueDreamToggle self, bool usingDreamVersion)
     {
-        if (Gs.RemoveGodhomeFlashes) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
+        if (Gs.RemoveOtherGodhomeFlashes) self.dreamBurstSpawnPoint.position = new Vector3(-200f, -200f, 0f);//puts our problems far away
         yield return orig(self, usingDreamVersion);
     }
         

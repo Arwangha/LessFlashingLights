@@ -213,6 +213,29 @@ public static class ModMenu
                 applySetting: index => { LessFlashingLights.Gs.RemovePureVesselTendrils = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.RemovePureVesselTendrils ? 0 : 1),
             
+            new TextPanel(name: "Godhome-specific effects"),
+            
+            new HorizontalOption(
+                name: "Remove Godhome transition fl.",
+                description: "Removes the white effect occuring when starting or leaving a fight",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.RemoveGodhomeTransitionsFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveGodhomeTransitionsFlashes ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Remove Godhome transition pt.",
+                description: "Removes the white particles spawned when starting or leaving a fight",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.RemoveGodhomeTransitionsParticles = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveGodhomeTransitionsParticles ? 0 : 1),
+            
+            new HorizontalOption(
+                name: "Remove other Godhome-specific fl.",
+                description: "includes unlocking and completing pantheons and boss statues",
+                values: new[] { "Yes", "No" },
+                applySetting: index => { LessFlashingLights.Gs.RemoveOtherGodhomeFlashes = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.RemoveOtherGodhomeFlashes ? 0 : 1),
+            
             new TextPanel(name: "Miscellaneous effects"),
             
             new HorizontalOption(
@@ -228,13 +251,6 @@ public static class ModMenu
                 values: new[] { "Yes", "No" },
                 applySetting: index => { LessFlashingLights.Gs.ToneDownExplosions = index == 0; },
                 loadSetting: () => LessFlashingLights.Gs.ToneDownExplosions ? 0 : 1),
-            
-            new HorizontalOption(
-                name: "Remove Godhome-specific fl.",
-                description: "includes statues, pantheons doors and transitions",
-                values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.RemoveGodhomeFlashes = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.RemoveGodhomeFlashes ? 0 : 1),
             
             new HorizontalOption(
                 name: "Tone down essence collection",

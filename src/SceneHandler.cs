@@ -72,11 +72,11 @@ public partial class LessFlashingLights
                 GameManager.instance.StartCoroutine(RemoveGrimmLightUpFlash());
                 break;
                 
-            case "GG_Atrium_Roof" when Gs.RemoveGodhomeFlashes:
+            case "GG_Atrium_Roof" when Gs.RemoveOtherGodhomeFlashes:
                 GameManager.instance.StartCoroutine(RemoveRoofPantheonUnlockFlashes());
                 break;
                 
-            case "GG_Atrium" when Gs.RemoveGodhomeFlashes:
+            case "GG_Atrium" when Gs.RemoveOtherGodhomeFlashes:
                 //no idea why there's 5 in Atrium but let's be safe
                 GameManager.instance.StartCoroutine(RemoveAtriumPantheonUnlockFlashes("GG_Challenge_Door"));
                 GameManager.instance.StartCoroutine(RemoveAtriumPantheonUnlockFlashes("GG_Challenge_Door (1)"));
@@ -94,7 +94,7 @@ public partial class LessFlashingLights
                 _inDreamerCutscene = true;
                 break;
                     
-            case "GG_End_Sequence" when Gs.RemoveGodhomeFlashes:
+            case "GG_End_Sequence" when Gs.RemoveOtherGodhomeFlashes:
                 SpriteRenderer[] orbFlashes = GameObject.Find("Big Orb Flash").GetComponentsInChildren<SpriteRenderer>();
                 foreach (var renderer in orbFlashes)
                 {
