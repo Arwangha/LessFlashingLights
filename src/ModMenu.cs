@@ -175,8 +175,8 @@ public static class ModMenu
                 name: "Tone down Hornet fights",
                 description: "Reduces the wind, removes parry and thread storm flashes",
                 values: new[] { "Yes", "No" },
-                applySetting: index => { LessFlashingLights.Gs.ToneDownHornetfights = index == 0; },
-                loadSetting: () => LessFlashingLights.Gs.ToneDownHornetfights ? 0 : 1),
+                applySetting: index => { LessFlashingLights.Gs.ToneDownHornetFights = index == 0; },
+                loadSetting: () => LessFlashingLights.Gs.ToneDownHornetFights ? 0 : 1),
             
             new HorizontalOption(
                 name: "Tone down Grimm fights",

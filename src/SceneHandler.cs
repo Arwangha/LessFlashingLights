@@ -10,6 +10,77 @@ namespace LessFlashingLights;
 // ReSharper disable once ClassNeverInstantiated.Global
 public partial class LessFlashingLights
 {
+    private void RemoveTHKFlashes(Scene newScene)
+    {
+        IEnumerable<GameObject> hollowKnightChains =
+            newScene.GetAllGameObjects().Where(o => o.name.Contains("hollow_knight_chain_base") && !o.name.Contains("("));
+
+        foreach (GameObject chain in hollowKnightChains)
+        {
+            GameObject sharpFlash = chain.Child("Sharp Flash");
+            GameObject burst = chain.Child("Burst");
+
+            if (sharpFlash)
+            {
+                sharpFlash.GetComponent<MeshRenderer>().enabled = false;
+                sharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
+            }
+
+            if (burst)
+            {
+                burst.GetComponent<SpriteRenderer>().enabled = false;
+            }
+        }
+
+        GameObject bossControl = GameObject.Find("Boss Control");
+        GameObject shieldShatter = bossControl.Child("Shield Shatter");
+        GameObject hornetFlash = bossControl.Child("Hollow Knight Boss").Child("Hornet Flash");
+        GameObject counterFlash = bossControl.Child("Hollow Knight Boss").Child("Counter Flash");
+
+        if (shieldShatter)
+        {
+            shieldShatter.GetComponent<SpriteRenderer>().enabled = false;
+            GameObject shieldSharpFlash = shieldShatter.Child("Sharp Flash");
+            if (shieldSharpFlash)
+            {
+                shieldSharpFlash.GetComponent<MeshRenderer>().enabled = false;
+                shieldSharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
+            }
+        }
+
+        if (hornetFlash)
+        {
+            hornetFlash.GetComponent<MeshRenderer>().enabled = false;
+            hornetFlash.GetComponent<PlayMakerFSM>().enabled = false;
+        }
+
+        if (counterFlash)
+        {
+            counterFlash.GetComponent<MeshRenderer>().enabled = false;
+            counterFlash.GetComponent<PlayMakerFSM>().enabled = false;
+        }
+    }
+
+    private void RemoveGGEndSequenceFlashes(Scene newScene)
+    {
+        SpriteRenderer[] orbFlashes = GameObject.Find("Big Orb Flash").GetComponentsInChildren<SpriteRenderer>();
+        foreach (var renderer in orbFlashes)
+        {
+            renderer.enabled = false;
+        }
+
+        GameObject.Find("GG_Challenge_Door_Complete_Canvas").Child("Backboard").Child("Core")
+            .Child("BindingFlash").RemoveComponent<Image>();
+
+        IEnumerable<GameObject> bindingFlashes = newScene.GetAllGameObjects()
+            .Where(o => o.name.Contains("GG_victory_orb_appear_extra"));
+                    
+        foreach (var bindingFlash in bindingFlashes)
+        {
+            bindingFlash.Child("white_glow").GetComponent<SpriteRenderer>().enabled = false;
+        }
+    }
+    
     private void OnSceneChange(Scene oldScene, Scene newScene)
     {
         if (_ghostExploding) _ghostExploding = false;
@@ -95,25 +166,10 @@ public partial class LessFlashingLights
                 break;
                     
             case "GG_End_Sequence" when Gs.RemoveOtherGodhomeFlashes:
-                SpriteRenderer[] orbFlashes = GameObject.Find("Big Orb Flash").GetComponentsInChildren<SpriteRenderer>();
-                foreach (var renderer in orbFlashes)
-                {
-                    renderer.enabled = false;
-                }
-
-                GameObject.Find("GG_Challenge_Door_Complete_Canvas").Child("Backboard").Child("Core")
-                    .Child("BindingFlash").RemoveComponent<Image>();
-
-                IEnumerable<GameObject> bindingFlashes = newScene.GetAllGameObjects()
-                    .Where(o => o.name.Contains("GG_victory_orb_appear_extra"));
-                    
-                foreach (var bindingFlash in bindingFlashes)
-                {
-                    bindingFlash.Child("white_glow").GetComponent<SpriteRenderer>().enabled = false;
-                }
+                RemoveGGEndSequenceFlashes(newScene);
                 break;
 
-            case "Deepnest_East_Hornet" when Gs.ToneDownHornetfights:
+            case "Deepnest_East_Hornet" when Gs.ToneDownHornetFights:
                 IEnumerable<GameObject> blizzardParticles =
                     newScene.GetAllGameObjects().Where(o => o.name.Contains("blizzard_particles"));
                     
@@ -132,54 +188,7 @@ public partial class LessFlashingLights
                 break;
         
             case "Room_Final_Boss_Core" when Gs.RemoveTHKSpecificFlashes:
-                IEnumerable<GameObject> hollowKnightChains =
-                    newScene.GetAllGameObjects().Where(o => o.name.Contains("hollow_knight_chain_base") && !o.name.Contains("("));
-
-                foreach (GameObject chain in hollowKnightChains)
-                {
-                    GameObject sharpFlash = chain.Child("Sharp Flash");
-                    GameObject burst = chain.Child("Burst");
-
-                    if (sharpFlash)
-                    {
-                        sharpFlash.GetComponent<MeshRenderer>().enabled = false;
-                        sharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                    }
-
-                    if (burst)
-                    {
-                        burst.GetComponent<SpriteRenderer>().enabled = false;
-                    }
-                }
-            
-                GameObject bossControl = GameObject.Find("Boss Control");
-                GameObject shieldShatter = bossControl.Child("Shield Shatter");
-                GameObject hornetFlash = bossControl.Child("Hollow Knight Boss").Child("Hornet Flash");
-                GameObject counterFlash = bossControl.Child("Hollow Knight Boss").Child("Counter Flash");
-
-                if (shieldShatter)
-                {
-                    shieldShatter.GetComponent<SpriteRenderer>().enabled = false;
-                    GameObject shieldSharpFlash = shieldShatter.Child("Sharp Flash");
-                    if (shieldSharpFlash)
-                    {
-                        shieldSharpFlash.GetComponent<MeshRenderer>().enabled = false;
-                        shieldSharpFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                    }
-                }
-
-                if (hornetFlash)
-                {
-                    hornetFlash.GetComponent<MeshRenderer>().enabled = false;
-                    hornetFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                }
-
-                if (counterFlash)
-                {
-                    counterFlash.GetComponent<MeshRenderer>().enabled = false;
-                    counterFlash.GetComponent<PlayMakerFSM>().enabled = false;
-                }
-                
+                RemoveTHKFlashes(newScene);
                 break;
         }
     }

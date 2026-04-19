@@ -24,7 +24,7 @@ public class GlobalSettings
     public bool RemoveMajorItemPickupsFlashes = true;
     public bool ToneDownBirthPlaceFlashes = true;
     public bool ToneDownRadianceFightsFlashes = true;
-    public bool ToneDownHornetfights = true;
+    public bool ToneDownHornetFights = true;
     public bool ToneDownUumuuFight = true;
     public bool RemoveCrystalDashFlashes = true;
     public bool RemoveHealFlashes = true;

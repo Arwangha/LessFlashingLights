@@ -301,7 +301,7 @@ public partial class LessFlashingLights
             //hornet counter & thread storm
             case "Counter Flash":
             case "Flash Effect":
-                if (_inHornetFight && Gs.ToneDownHornetfights)
+                if (_inHornetFight && Gs.ToneDownHornetFights)
                 {
                     self.gameObject.SetActive(false);
                 }
